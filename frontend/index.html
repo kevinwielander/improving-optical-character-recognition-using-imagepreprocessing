@@ -11,6 +11,7 @@
       crossorigin="anonymous"
     />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>OCR Tool for Business Documents </title>
   </head>
   <body>
@@ -38,23 +39,18 @@
         const input = document.getElementById("file-upload");
         const file = input.files[0];
         const formData = new FormData();
-        formData.append("file", file);
-        fetch("http://localhost:8000/single_file_ocr", {
-            method: "POST",
-            body: formData,
-            headers: {
-                "Content-Type": "false",
-                "Cache-Control": "no-cache",
-                "Process-Data": "false"
-            }
-            })
-            .then(response => response.json())
-            .then(data => {
-                swal("Converted Text", data.text);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        formData.append("image", file);
+         $.ajax({
+        type: 'POST',
+        url: '/single_file_ocr',
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(data) {
+            swal("Text:", data.text);
+          }
+        });
     }
   </script>
 </html>
