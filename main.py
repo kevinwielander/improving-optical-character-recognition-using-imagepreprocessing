@@ -1,26 +1,27 @@
 from typing import List
-from fastapi import FastAPI, UploadFile, Request, File, BackgroundTasks
+from fastapi import FastAPI, UploadFile, Request, File
 from fastapi.templating import Jinja2Templates
-import cv2
-import numpy as np
 import os
 import shutil
 
+from ocr.tesseract import read_image
+
 app = FastAPI()
-frontend = Jinja2Templates(directory="../frontend")
+frontend = Jinja2Templates(directory="frontend")
 
 
 @app.get("/")
 def root(request: Request):
-    return frontend.TemplateResponse("index.html", {"request":request})
+    return frontend.TemplateResponse("index.html", {"request": request})
+
 
 @app.post("/single_file_ocr")
 async def single_file_ocr(image: UploadFile = File(...)):
-    path = "../temp/single"
-    os.mkdir(path)
+    path = "temp"
     filename = _store_file(image, path, image.filename)
-    #os.remove(path)
-    return {"filename": filename, "text": "this works"}
+    text = await read_image(filename, 'eng')
+    os.remove(filename)
+    return {"filename": filename, "text": text}
 
 
 @app.post("/bulk_ocr")
@@ -28,15 +29,14 @@ async def bulk_ocr(images: List[UploadFile] = File(...)):
     path = "../temp/bulk"
     os.mkdir(path)
     for image in images:
-        _store_file(image,path,image.filename)
+        _store_file(image, path, image.filename)
     #os.remove(path)
     return {"filename": "filename", "text": "this works"}
 
 
 
 def _store_file(file, path, name):
-    extension = os.path.splitext(file.filename)[-1]
-    temp_file = os.path.join(path, name + extension)
+    temp_file = os.path.join(path, name)
     with open(temp_file, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     return temp_file
