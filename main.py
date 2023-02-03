@@ -8,7 +8,7 @@ from ocr.tesseract import read_image
 
 app = FastAPI()
 frontend = Jinja2Templates(directory="frontend")
-
+path = "temp"
 
 @app.get("/")
 def root(request: Request):
@@ -17,8 +17,7 @@ def root(request: Request):
 
 @app.post("/single_file_ocr")
 async def single_file_ocr(image: UploadFile = File(...)):
-    path = "temp"
-    filename = _store_file(image, path, image.filename)
+    filename = _store_file(image, image.filename)
     text = await read_image(filename, 'eng')
     os.remove(filename)
     return {"filename": filename, "text": text}
@@ -26,16 +25,16 @@ async def single_file_ocr(image: UploadFile = File(...)):
 
 @app.post("/bulk_ocr")
 async def bulk_ocr(images: List[UploadFile] = File(...)):
-    path = "../temp/bulk"
-    os.mkdir(path)
+    results = []
     for image in images:
-        _store_file(image, path, image.filename)
-    #os.remove(path)
-    return {"filename": "filename", "text": "this works"}
+        filename = _store_file(image, image.filename)
+        text = await read_image(filename, 'eng')
+        os.remove(filename)
+        results.append({"filename": filename, "text": text})
+    return results
 
 
-
-def _store_file(file, path, name):
+def _store_file(file, name):
     temp_file = os.path.join(path, name)
     with open(temp_file, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
