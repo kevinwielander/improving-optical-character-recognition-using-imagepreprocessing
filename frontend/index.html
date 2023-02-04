@@ -24,7 +24,7 @@
         <div class="col-md-6 offset-md-3">
           <div class="form-group">
             <label for="file-upload">Upload Image:</label>
-            <input type="file" class="form-control-file" id="file-upload" accept="image/jpeg, image/png" />
+            <input type="file" class="form-control-file" id="file-upload" accept="image/jpeg, image/png" multiple/>
             <small class="form-text text-muted">Only JPEG and PNG image files are allowed.</small>
           </div>
           <button class="btn btn-primary btn-block mt-3" onclick="requestText()">
@@ -37,20 +37,53 @@
   <script>
     function requestText() {
         const input = document.getElementById("file-upload");
-        const file = input.files[0];
+        const files = input.files;
         const formData = new FormData();
-        formData.append("image", file);
-         $.ajax({
-        type: 'POST',
-        url: '/single_file_ocr',
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(data) {
-            swal("Text:", data.text);
+        if(files.length === 0) {
+          swal("Error", "No images provided", "error");
+        } else if (files.length === 1) {
+          formData.append("image", files[0]);
+          $.ajax({
+            type: 'POST',
+            url: '/single_file_ocr',
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response) {
+              swal("Success", "Converted File is being downloaded...");
+               // Download the file
+              var blob = new Blob([response]);
+              var link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.download = files[0].name.split('.')[0];
+              console.log(response)
+              link.click();
+            }
+          });
+        } else {
+          for(let file of files) {
+            formData.append("images", file);
           }
-        });
+          $.ajax({
+            type: 'POST',
+            url: '/bulk_ocr',
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response) {
+              swal("Success", "Converted Files are being downloaded...");
+              for (let i = 0; i < response.length; i++) {
+                let blob = new Blob([response[i].body]);
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = files[i].name.split('.')[0];
+                link.click();
+              }
+            }
+          });
+        }
     }
   </script>
 </html>
