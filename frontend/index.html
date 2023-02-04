@@ -51,7 +51,7 @@
             cache: false,
             processData: false,
             success: function(response) {
-              swal("Success", "Converted File is being downloaded...");
+              swal("Success", "File has been converted");
                // Download the file
               var blob = new Blob([response]);
               var link = document.createElement('a');
@@ -73,7 +73,7 @@
             cache: false,
             processData: false,
             success: function(response) {
-              swal("Success", "Converted Files are being downloaded...");
+              swal("Success", "Files have been converted");
               for (let i = 0; i < response.length; i++) {
                 let blob = new Blob([response[i].body]);
                 let link = document.createElement('a');
