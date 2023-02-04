@@ -1,6 +1,7 @@
 from typing import List
-from fastapi import FastAPI, UploadFile, Request, File
+from fastapi import FastAPI, UploadFile, Request, File, Response
 from fastapi.templating import Jinja2Templates
+from io import BytesIO
 import os
 import shutil
 
@@ -20,7 +21,10 @@ async def single_file_ocr(image: UploadFile = File(...)):
     filename = _store_file(image, image.filename)
     text = await read_image(filename, 'eng')
     os.remove(filename)
-    return {"filename": filename, "text": text}
+    file_name = filename.split('.')[0] + '.txt'
+    file_bytes = BytesIO(text.encode())
+    return Response(content=file_bytes.getvalue(), media_type="text/plain",
+                    headers={"Content-Disposition": f"attachment;filename={file_name}"})
 
 
 @app.post("/bulk_ocr")
