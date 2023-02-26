@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3dedc67-c00c-4740-8acc-e980b3709972" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/temp/scan00.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/temp/scan01.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocr/tesseract.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocr/tesseract.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +73,9 @@
       <workItem from="1675443052488" duration="715000" />
       <workItem from="1675443778959" duration="1743000" />
       <workItem from="1675445875142" duration="4248000" />
-      <workItem from="1675514590965" duration="11339000" />
+      <workItem from="1675514590965" duration="11646000" />
+      <workItem from="1675787527695" duration="3327000" />
+      <workItem from="1677315777288" duration="3719000" />
     </task>
     <servers />
   </component>
