@@ -9,6 +9,7 @@ from PIL import Image
 from pdf2image import convert_from_path
 
 from ocr.tesseract import read_image
+from preprocessing.preprocessor import Preprocessor
 
 app = FastAPI()
 frontend = Jinja2Templates(directory="frontend")
@@ -27,6 +28,12 @@ async def single_file_ocr(image: UploadFile = File(...)):
         image_path = filename[:-4] + ".jpeg"
         images[0].save(image_path, 'JPEG')
         filename = image_path
+
+    # Preprocess the image
+    preprocessor = Preprocessor(filename)
+    preprocessor.to_grayscale()
+    preprocessor.check_and_scale_dpi()
+
     text = await read_image(filename, 'deu')
     os.remove(filename)
     file_name = image.filename.split('.')[0] + '.txt'
