@@ -13,6 +13,7 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>OCR Tool for Business Documents </title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
   </head>
   <body>
     <div class="container mt-5">
@@ -31,10 +32,51 @@
             Extract Text
           </button>
         </div>
+        <div class="col-md-6 offset-md-3 mt-5">
+          <div class="form-group">
+            <label for="file-upload-text">Upload Text Files:</label>
+            <input type="file" class="form-control-file" id="file-upload-text" accept=".txt" multiple/>
+            <small class="form-text text-muted">Only .txt files are allowed.</small>
+          </div>
+          <button class="btn btn-primary btn-block mt-3" onclick="requestMetrics()">
+              Generate Text Metrics Report
+          </button>
+        </div>
       </div>
     </div>
   </body>
   <script>
+    function requestMetrics() {
+      const input = document.getElementById("file-upload-text");
+      const files = input.files;
+      const formData = new FormData();
+
+      if(files.length === 0) {
+        swal("Error", "No text files provided", "error");
+      } else {
+          for(let file of files) {
+              formData.append("files", file);
+          }
+
+          $.ajax({
+              type: 'POST',
+              url: '/text_metrics',
+              data: formData,
+              contentType: false,
+              cache: false,
+              processData: false,
+              success: function(response) {
+                  swal("Success", "Text metrics report has been generated");
+                  let blob = new Blob([response]);
+                  let link = document.createElement('a');
+                  link.href = window.URL.createObjectURL(blob);
+                  link.download = "text_metrics_report.csv";
+                  link.click();
+              }
+          });
+      }
+  }
+
     function requestText() {
         const input = document.getElementById("file-upload");
         const files = input.files;
