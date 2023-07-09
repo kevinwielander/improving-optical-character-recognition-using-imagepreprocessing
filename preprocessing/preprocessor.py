@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 from PIL import Image
+import logging
+
+logger = logging.getLogger(__name__)
 class Preprocessor:
     def __init__(self, image_path):
         self.image_path = image_path
@@ -10,6 +13,7 @@ class Preprocessor:
         # Convert the image to grayscale using OpenCV
         gray_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.image = gray_image
+        logger.info("Image shape after grayscale conversion: %s", self.image.shape)
 
     def check_and_scale_dpi(self):
         # Open the image using PIL and get its DPI
@@ -31,11 +35,7 @@ class Preprocessor:
             # Resize the image using OpenCV
             resized_image = cv2.resize(self.image, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_CUBIC)
 
-            # Save the resized image with 300 DPI
-            cv2.imwrite(self.image_path, resized_image, [cv2.IMWRITE_JPEG_QUALITY, 100])
-
-            # Reload the image using OpenCV after the DPI is scaled
-            self.image = cv2.imread(self.image_path)
+            self.image = resized_image
 
     def apply_filter(self):
         # Apply blur to smooth out the edges
@@ -60,8 +60,8 @@ class ImagePipeline:
 
     def process_image(self):
         # Call the preprocessing methods in order
-        self.preprocessor.to_grayscale()
         self.preprocessor.check_and_scale_dpi()
+        self.preprocessor.to_grayscale()
         self.preprocessor.apply_filter()
         self.preprocessor.apply_morphological_operation()
         self.preprocessor.apply_thresholding()

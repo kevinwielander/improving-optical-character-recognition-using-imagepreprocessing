@@ -1,0 +1,5 @@
+2023-07-09 16:24:59,418 - main - INFO - Received request for text metrics report
+2023-07-09 16:24:59,419 - main - ERROR - No matching ground truth file found for scan00.pdf
+2023-07-09 16:30:45,558 - main - INFO - Received request for text metrics report
+2023-07-09 16:30:45,559 - main - ERROR - No matching ground truth file found for OCR file number 0.
+2023-07-09 17:29:57,815 - main - INFO - Received request for text metrics report

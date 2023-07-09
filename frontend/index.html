@@ -34,9 +34,9 @@
         </div>
         <div class="col-md-6 offset-md-3 mt-5">
           <div class="form-group">
-            <label for="file-upload-ocr">Upload OCR Text Files:</label>
-            <input type="file" class="form-control-file" id="file-upload-ocr" accept=".txt" multiple/>
-            <small class="form-text text-muted">Only .txt files are allowed.</small>
+            <label for="file-upload-ocr">Upload Image:</label>
+            <input type="file" class="form-control-file" id="file-upload-ocr" accept="image/jpeg, image/png, application/pdf" multiple/>
+            <small class="form-text text-muted">Only JPEG, PNG and PDF files are allowed.</small>
           </div>
           <div class="form-group">
             <label for="file-upload-gt">Upload Ground Truth Text Files:</label>
@@ -70,7 +70,7 @@
 
       $.ajax({
           type: 'POST',
-          url: '/text_metrics',
+          url: '/evaluation',
           data: formData,
           contentType: false,
           cache: false,
@@ -88,54 +88,38 @@
     }
 
     function requestText() {
-        const input = document.getElementById("file-upload");
-        const files = input.files;
-        const formData = new FormData();
-        if(files.length === 0) {
-          swal("Error", "No images provided", "error");
-        } else if (files.length === 1) {
-          formData.append("image", files[0]);
-          $.ajax({
-            type: 'POST',
-            url: '/single_file_ocr',
-            data: formData,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(response) {
-              swal("Success", "File has been converted");
-               // Download the file
-              var blob = new Blob([response]);
-              var link = document.createElement('a');
-              link.href = window.URL.createObjectURL(blob);
-              link.download = files[0].name.split('.')[0];
-              console.log(response)
-              link.click();
-            }
-          });
-        } else {
-          for(let file of files) {
-            formData.append("images", file);
-          }
-          $.ajax({
-            type: 'POST',
-            url: '/bulk_ocr',
-            data: formData,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(response) {
-              swal("Success", "Files have been converted");
-              for (let i = 0; i < response.length; i++) {
-                let blob = new Blob([response[i].body]);
-                let link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = files[i].name.split('.')[0];
-                link.click();
-              }
-            }
-          });
-        }
+    const input = document.getElementById("file-upload");
+    const files = input.files;
+    const formData = new FormData();
+
+    if(files.length === 0) {
+      swal("Error", "No images provided", "error");
+      return;
     }
+
+    // always add files to form data
+    for(let file of files) {
+        formData.append("images", file);
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/convert',
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response) {
+          swal("Success", "File(s) have been converted");
+          for (let i = 0; i < response.length; i++) {
+            let blob = new Blob([response[i].body]);
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = files[i].name.split('.')[0];
+            link.click();
+          }
+        }
+    });
+}
   </script>
 </html>
