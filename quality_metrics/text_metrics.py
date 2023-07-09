@@ -9,11 +9,10 @@ class TextMetrics:
         self.ocr_text = ocr_text
 
     def wer(self):
-        return nltk.edit_distance(self.ground_truth.split(), self.ocr_text.split()) / len(self.ground_truth.split())
+        return round(nltk.edit_distance(self.ground_truth.split(), self.ocr_text.split()) / len(self.ground_truth.split()), 2)
 
     def cer(self):
-        return nltk.edit_distance(self.ground_truth, self.ocr_text) / len(self.ground_truth)
+        return round(nltk.edit_distance(self.ground_truth, self.ocr_text) / len(self.ground_truth), 2)
 
     def lev_distance(self):
-        return nltk.edit_distance(self.ground_truth, self.ocr_text)
-
+        return round(nltk.edit_distance(self.ground_truth, self.ocr_text), 2)
