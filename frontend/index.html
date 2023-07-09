@@ -34,8 +34,13 @@
         </div>
         <div class="col-md-6 offset-md-3 mt-5">
           <div class="form-group">
-            <label for="file-upload-text">Upload Text Files:</label>
-            <input type="file" class="form-control-file" id="file-upload-text" accept=".txt" multiple/>
+            <label for="file-upload-ocr">Upload OCR Text Files:</label>
+            <input type="file" class="form-control-file" id="file-upload-ocr" accept=".txt" multiple/>
+            <small class="form-text text-muted">Only .txt files are allowed.</small>
+          </div>
+          <div class="form-group">
+            <label for="file-upload-gt">Upload Ground Truth Text Files:</label>
+            <input type="file" class="form-control-file" id="file-upload-gt" accept=".txt" multiple/>
             <small class="form-text text-muted">Only .txt files are allowed.</small>
           </div>
           <button class="btn btn-primary btn-block mt-3" onclick="requestMetrics()">
@@ -47,35 +52,40 @@
   </body>
   <script>
     function requestMetrics() {
-      const input = document.getElementById("file-upload-text");
-      const files = input.files;
-      const formData = new FormData();
+  const ocrInput = document.getElementById("file-upload-ocr");
+  const ocrFiles = ocrInput.files;
+  const gtInput = document.getElementById("file-upload-gt");
+  const gtFiles = gtInput.files;
+  const formData = new FormData();
 
-      if(files.length === 0) {
-        swal("Error", "No text files provided", "error");
-      } else {
-          for(let file of files) {
-              formData.append("files", file);
-          }
-
-          $.ajax({
-              type: 'POST',
-              url: '/text_metrics',
-              data: formData,
-              contentType: false,
-              cache: false,
-              processData: false,
-              success: function(response) {
-                  swal("Success", "Text metrics report has been generated");
-                  let blob = new Blob([response]);
-                  let link = document.createElement('a');
-                  link.href = window.URL.createObjectURL(blob);
-                  link.download = "text_metrics_report.csv";
-                  link.click();
-              }
-          });
+  if(ocrFiles.length === 0 || gtFiles.length === 0) {
+    swal("Error", "No text files provided", "error");
+  } else {
+      for(let file of ocrFiles) {
+          formData.append("ocr_files", file);
       }
+      for(let file of gtFiles) {
+          formData.append("gt_files", file);
+      }
+
+      $.ajax({
+          type: 'POST',
+          url: '/text_metrics',
+          data: formData,
+          contentType: false,
+          cache: false,
+          processData: false,
+          success: function(response) {
+              swal("Success", "Text metrics report has been generated");
+              let blob = new Blob([response]);
+              let link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.download = "text_metrics_report.csv";
+              link.click();
+          }
+      });
   }
+    }
 
     function requestText() {
         const input = document.getElementById("file-upload");

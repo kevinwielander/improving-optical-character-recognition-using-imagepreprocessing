@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from io import BytesIO
 import os
 import shutil
+import logging
 from PIL import Image
 from pdf2image import convert_from_path
 
@@ -16,6 +17,7 @@ from preprocessing.preprocessor import Preprocessor
 from quality_metrics.text_metrics_report import TextMetricsReport
 
 app = FastAPI()
+logging.basicConfig(level=logging.INFO)
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 frontend = Jinja2Templates(directory="frontend")
 path = "temp"
@@ -69,22 +71,31 @@ async def text_metrics_report(ocr_files: List[UploadFile] = File(...), gt_files:
     if len(ocr_files) == 0 or len(gt_files) == 0:
         raise HTTPException(status_code=400, detail="No text files provided")
 
+    ocr_files_dict = {ocr_file.filename: ocr_file for ocr_file in ocr_files}
+    gt_files_dict = {gt_file.filename: gt_file for gt_file in gt_files}
+    for file_name in ocr_files_dict.keys():
+        if file_name not in gt_files_dict:
+            raise HTTPException(status_code=400, detail=f"No matching ground truth file found for {file_name}")
+
     ocr_texts = []
     ground_truths = []
-    for ocr_file, gt_file in zip(ocr_files, gt_files):
-        ocr_filename = _store_file(ocr_file, ocr_file.filename)
-        gt_filename = _store_file(gt_file, gt_file.filename)
+    filenames = []
+    for filename, ocr_file in ocr_files_dict.items():
+        gt_file = gt_files_dict[filename]
 
-        with open(ocr_filename, 'r') as f:
-            ocr_texts.append(f.read())
-        ground_truths.append(gt_filename)
+        ocr_text = await ocr_file.read()
+        gt_text = await gt_file.read()
 
-    report = TextMetricsReport(ground_truths, ocr_texts)
+        ocr_texts.append(ocr_text.decode('utf-8'))
+        ground_truths.append(gt_text.decode('utf-8'))
+        filenames.append(filename)
+
+    report = TextMetricsReport(ground_truths, ocr_texts, filenames)
     report.generate_report()
 
     for ocr_file, gt_file in zip(ocr_files, gt_files):
-        os.remove(ocr_file.filename)
-        os.remove(gt_file.filename)
+        await ocr_file.close()
+        await gt_file.close()
 
     return FileResponse(report.filename, media_type='text/csv',
                         headers={"Content-Disposition": f"attachment;filename={report.filename}"})
