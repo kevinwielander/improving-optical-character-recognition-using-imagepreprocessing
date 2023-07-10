@@ -9,10 +9,11 @@ from quality_metrics.visualization import Visualization
 logger = logging.getLogger(__name__)
 
 class TextMetricsReport:
-    def __init__(self, ground_truths, ocr_texts, filenames):
+    def __init__(self, ground_truths, ocr_texts, filenames, preprocess_steps):
         self.ground_truths = ground_truths
         self.ocr_texts = ocr_texts
         self.filenames = filenames
+        self.preprocess_steps = preprocess_steps
         self.filename = None
         self.metrics = []
 
@@ -23,7 +24,8 @@ class TextMetricsReport:
 
         total_cer, total_wer, total_lev_distance = 0, 0, 0
         total_characters, total_words = 0, 0
-        for i, (gt, ocr, fname) in enumerate(zip(self.ground_truths, self.ocr_texts, self.filenames)):
+        for i, (gt, ocr, fname, steps) in enumerate(
+                zip(self.ground_truths, self.ocr_texts, self.filenames, self.preprocess_steps)):
             tm = TextMetrics(gt, ocr)
             wer = tm.wer()
             cer = tm.cer()
@@ -35,8 +37,10 @@ class TextMetricsReport:
             total_characters += len(ocr.replace(' ', ''))
             total_words += len(ocr.split())
 
-            self.metrics.append({'Index': i, 'Filename': fname, 'WER': wer, 'CER': cer,
-                                 'Levenshtein Distance': lev_distance})
+            self.metrics.append(
+                {'Index': i, 'Filename': fname, 'Preprocessing Steps': ', '.join(steps), 'WER': wer, 'CER': cer,
+                 'Levenshtein Distance': lev_distance})
+
         logger.info(f"Computed metrics for {len(self.metrics)} files")
 
         if total_words != 0 and total_characters != 0:
@@ -64,4 +68,4 @@ class TextMetricsReport:
             logger.info(f"Created new report {self.filename}")
 
         vis = Visualization(df)
-        vis.plot_metrics(save=True)
+        vis.plot_metrics(save=False)

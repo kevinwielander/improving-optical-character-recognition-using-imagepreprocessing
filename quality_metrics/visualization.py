@@ -31,5 +31,5 @@ class Visualization:
             if not os.path.exists("resources/plots"):
                 os.makedirs("resources/plots")
             plt.savefig(f"resources/plots/metrics_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
-        plt.show()
+        #plt.show()
 

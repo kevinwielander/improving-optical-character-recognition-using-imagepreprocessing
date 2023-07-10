@@ -1,7 +1,8 @@
 import os
 
 import nltk
-
+import logging
+logger = logging.getLogger(__name__)
 
 class TextMetrics:
     def __init__(self, ground_truth, ocr_text):
