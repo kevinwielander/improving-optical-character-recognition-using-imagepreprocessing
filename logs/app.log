@@ -1197,3 +1197,227 @@ Buns, etc.) ausgenonnen! Weitere Iufornationen
 2023-07-10 17:07:17,485 - main - INFO - Received request for OCR experiment
 2023-07-10 17:07:35,003 - main - INFO - Received request for OCR experiment
 2023-07-10 17:11:53,177 - main - INFO - Received request for OCR experiment
+2023-07-10 17:31:55,496 - main - INFO - Received request for OCR experiment
+2023-07-10 20:10:05,723 - main - INFO - Received request for text metrics report
+2023-07-10 20:12:11,427 - main - INFO - Received request for text metrics report
+2023-07-10 20:12:54,488 - main - INFO - Received request for OCR experiment
+2023-07-10 20:15:47,390 - main - INFO - Received request for OCR experiment
+2023-07-10 20:23:36,512 - main - INFO - Received request for OCR experiment
+2023-07-10 20:27:03,485 - main - INFO - Received request for OCR experiment
+2023-07-10 20:31:27,925 - main - INFO - Received request for OCR experiment
+2023-07-10 20:36:57,730 - main - INFO - Received request for OCR experiment
+2023-07-10 20:39:22,522 - main - INFO - Received request for OCR experiment
+2023-07-10 20:39:29,068 - main - INFO - i:1
+2023-07-10 20:39:31,803 - main - INFO - i:2
+2023-07-10 20:39:38,551 - main - INFO - i:3
+2023-07-10 20:39:41,570 - main - INFO - i:4
+2023-07-10 20:40:59,282 - main - INFO - Received request for OCR experiment
+2023-07-10 20:41:05,796 - main - INFO - i:1
+2023-07-10 20:41:23,403 - main - INFO - Received request for OCR experiment
+2023-07-10 20:41:30,144 - main - INFO - i:1
+2023-07-10 20:41:43,167 - main - INFO - Received request for OCR experiment
+2023-07-10 20:41:49,901 - main - INFO - i:1
+2023-07-10 20:41:49,901 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:41:52,691 - main - INFO - i:2
+2023-07-10 20:41:52,691 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '(), ()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:41:59,189 - main - INFO - i:3
+2023-07-10 20:41:59,189 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "(), (), ('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:42:02,064 - main - INFO - i:4
+2023-07-10 20:42:02,064 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "(), (), ('filter',), ('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 20:45:48,144 - main - INFO - Received request for OCR experiment
+2023-07-10 20:45:54,787 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:45:57,509 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:46:03,681 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:46:06,408 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 20:47:20,297 - main - INFO - Received request for OCR experiment
+2023-07-10 20:47:27,643 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:47:31,306 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:47:39,992 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:47:43,734 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 20:50:41,970 - main - INFO - Received request for OCR experiment
+2023-07-10 20:50:49,361 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:50:53,049 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:51:01,686 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:51:05,395 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 20:52:06,923 - main - INFO - Received request for OCR experiment
+2023-07-10 20:52:14,401 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:52:17,995 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:52:26,861 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:52:30,535 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 20:53:59,319 - main - INFO - Received request for OCR experiment
+2023-07-10 20:54:06,757 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:54:10,358 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:54:18,952 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:54:22,591 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 20:56:46,546 - main - INFO - Received request for OCR experiment
+2023-07-10 20:56:54,173 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:56:58,039 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:57:05,401 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:57:08,444 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 20:57:49,431 - main - INFO - Received request for OCR experiment
+2023-07-10 20:57:58,262 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 20:58:01,093 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 20:58:07,258 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 20:58:09,984 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 21:00:04,013 - main - INFO - Received request for OCR experiment
+2023-07-10 21:00:10,728 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 21:00:13,521 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 21:00:19,797 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 21:00:22,530 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 21:01:03,354 - main - INFO - Received request for OCR experiment
+2023-07-10 21:01:09,845 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 21:01:12,575 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 21:01:18,782 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 21:01:21,484 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 21:03:23,663 - main - INFO - Received request for OCR experiment
+2023-07-10 21:03:30,488 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 21:03:33,290 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 21:03:39,605 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 21:03:42,362 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 21:06:26,895 - main - INFO - Received request for OCR experiment
+2023-07-10 21:06:34,397 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': '()', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 21:06:38,224 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': '()', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 21:06:45,737 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': "('filter',)", 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 21:06:49,718 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': "('filter',)", 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 21:09:19,036 - main - INFO - Received request for OCR experiment
+2023-07-10 21:09:25,688 - main - INFO - {'Index': 0, 'Filename': '00', 'Preprocessing Steps': 'No preprocessing', 'WER': 0.48, 'CER': 0.32, 'Levenshtein Distance': 366}
+2023-07-10 21:09:29,260 - main - INFO - {'Index': 1, 'Filename': '01', 'Preprocessing Steps': 'No preprocessing', 'WER': 0.43, 'CER': 0.22, 'Levenshtein Distance': 213}
+2023-07-10 21:09:36,756 - main - INFO - {'Index': 2, 'Filename': '00', 'Preprocessing Steps': 'filter', 'WER': 0.45, 'CER': 0.3, 'Levenshtein Distance': 339}
+2023-07-10 21:09:41,103 - main - INFO - {'Index': 3, 'Filename': '01', 'Preprocessing Steps': 'filter', 'WER': 0.39, 'CER': 0.19, 'Levenshtein Distance': 185}
+2023-07-10 21:13:33,683 - main - INFO - Received request for OCR experiment
+2023-07-10 21:13:40,230 - main - INFO - Progress: 0/32
+2023-07-10 21:13:42,969 - main - INFO - Progress: 1/32
+2023-07-10 21:13:49,168 - main - INFO - Progress: 2/32
+2023-07-10 21:13:51,881 - main - INFO - Progress: 3/32
+2023-07-10 21:14:21,828 - main - INFO - Progress: 4/32
+2023-07-10 21:14:33,845 - main - INFO - Progress: 5/32
+2023-07-10 21:14:40,616 - main - INFO - Progress: 6/32
+2023-07-10 21:14:43,615 - main - INFO - Progress: 7/32
+2023-07-10 21:14:47,191 - main - INFO - Progress: 8/32
+2023-07-10 21:15:24,178 - main - INFO - Progress: 10/32
+2023-07-10 21:15:35,973 - main - INFO - Progress: 11/32
+2023-07-10 21:15:42,518 - main - INFO - Progress: 12/32
+2023-07-10 21:15:45,413 - main - INFO - Progress: 13/32
+2023-07-10 21:15:49,030 - main - INFO - Progress: 14/32
+2023-07-10 21:15:51,590 - main - INFO - Progress: 15/32
+2023-07-10 21:16:22,082 - main - INFO - Progress: 16/32
+2023-07-10 21:16:34,052 - main - INFO - Progress: 17/32
+2023-07-10 21:17:02,708 - main - INFO - Progress: 18/32
+2023-07-10 21:17:17,706 - main - INFO - Progress: 20/32
+2023-07-10 21:17:20,348 - main - INFO - Progress: 21/32
+2023-07-10 21:17:50,360 - main - INFO - Progress: 22/32
+2023-07-10 21:18:02,359 - main - INFO - Progress: 23/32
+2023-07-10 21:18:30,475 - main - INFO - Progress: 24/32
+2023-07-10 21:18:41,974 - main - INFO - Progress: 25/32
+2023-07-10 21:18:45,303 - main - INFO - Progress: 26/32
+2023-07-10 21:18:47,906 - main - INFO - Progress: 27/32
+2023-07-10 21:19:16,050 - main - INFO - Progress: 28/32
+2023-07-10 21:20:00,178 - main - INFO - Progress: 30/32
+2023-07-10 21:20:12,481 - main - INFO - Progress: 31/32
+2023-07-10 21:24:13,152 - main - INFO - Received request for OCR experiment
+2023-07-10 21:25:00,720 - main - INFO - Progress: 10/496, Elapsed Time: 0:00:47.567745, Estimated End Time: 2023-07-10 22:03:32.512546
+2023-07-10 21:26:02,832 - main - INFO - Progress: 20/496, Elapsed Time: 0:01:49.680039, Estimated End Time: 2023-07-10 22:09:33.217628
+2023-07-10 21:27:28,808 - main - INFO - Progress: 30/496, Elapsed Time: 0:03:15.655610, Estimated End Time: 2023-07-10 22:18:07.992211
+2023-07-10 21:28:28,434 - main - INFO - Progress: 40/496, Elapsed Time: 0:04:15.281698, Estimated End Time: 2023-07-10 22:16:58.645487
+2023-07-10 21:29:35,597 - main - INFO - Progress: 50/496, Elapsed Time: 0:05:22.444824, Estimated End Time: 2023-07-10 22:17:31.805077
+2023-07-10 21:31:01,093 - main - INFO - Progress: 60/496, Elapsed Time: 0:06:47.940943, Estimated End Time: 2023-07-10 22:20:25.464556
+2023-07-10 21:34:56,326 - main - INFO - Progress: 70/496, Elapsed Time: 0:10:43.173748, Estimated End Time: 2023-07-10 22:40:10.497881
+2023-07-10 21:39:47,192 - main - INFO - Progress: 80/496, Elapsed Time: 0:15:34.040046, Estimated End Time: 2023-07-10 23:00:44.201099
+2023-07-10 21:44:53,962 - main - INFO - Progress: 90/496, Elapsed Time: 0:20:40.810281, Estimated End Time: 2023-07-10 23:18:11.396004
+2023-07-10 21:47:05,233 - main - INFO - Progress: 100/496, Elapsed Time: 0:22:52.080745, Estimated End Time: 2023-07-10 23:17:38.672954
+2023-07-10 21:47:56,068 - main - INFO - Progress: 110/496, Elapsed Time: 0:23:42.916008, Estimated End Time: 2023-07-10 23:11:09.210245
+2023-07-10 21:49:07,160 - main - INFO - Progress: 120/496, Elapsed Time: 0:24:54.007964, Estimated End Time: 2023-07-10 23:07:08.385417
+2023-07-10 21:49:58,081 - main - INFO - Progress: 130/496, Elapsed Time: 0:25:44.928990, Estimated End Time: 2023-07-10 23:02:27.650881
+2023-07-10 21:50:23,692 - main - INFO - Progress: 140/496, Elapsed Time: 0:26:10.539861, Estimated End Time: 2023-07-10 22:56:57.351050
+2023-07-10 21:51:01,669 - main - INFO - Progress: 150/496, Elapsed Time: 0:26:48.517222, Estimated End Time: 2023-07-10 22:52:51.982867
+2023-07-10 21:53:33,217 - main - INFO - Progress: 160/496, Elapsed Time: 0:29:20.064497, Estimated End Time: 2023-07-10 22:55:09.352542
+2023-07-10 21:58:26,462 - main - INFO - Progress: 170/496, Elapsed Time: 0:34:13.309532, Estimated End Time: 2023-07-10 23:04:03.985035
+2023-07-10 22:03:28,562 - main - INFO - Progress: 180/496, Elapsed Time: 0:39:15.410163, Estimated End Time: 2023-07-10 23:12:23.616192
+2023-07-10 22:06:49,467 - main - INFO - Progress: 190/496, Elapsed Time: 0:42:36.315128, Estimated End Time: 2023-07-10 23:15:26.480505
+2023-07-10 22:07:36,673 - main - INFO - Progress: 200/496, Elapsed Time: 0:43:23.521298, Estimated End Time: 2023-07-10 23:11:49.885311
+2023-07-10 22:08:41,246 - main - INFO - Progress: 210/496, Elapsed Time: 0:44:28.094169, Estimated End Time: 2023-07-10 23:09:14.936866
+2023-07-10 22:09:40,687 - main - INFO - Progress: 220/496, Elapsed Time: 0:45:27.535045, Estimated End Time: 2023-07-10 23:06:42.504494
+2023-07-10 22:10:04,537 - main - INFO - Progress: 230/496, Elapsed Time: 0:45:51.384377, Estimated End Time: 2023-07-10 23:03:06.572920
+2023-07-10 22:10:38,234 - main - INFO - Progress: 240/496, Elapsed Time: 0:46:25.081431, Estimated End Time: 2023-07-10 23:00:08.987604
+2023-07-10 22:11:48,794 - main - INFO - Progress: 250/496, Elapsed Time: 0:47:35.641761, Estimated End Time: 2023-07-10 22:58:38.745880
+2023-07-10 22:16:39,669 - main - INFO - Progress: 260/496, Elapsed Time: 0:52:26.516976, Estimated End Time: 2023-07-10 23:04:15.738781
+2023-07-10 22:22:06,536 - main - INFO - Progress: 270/496, Elapsed Time: 0:57:53.384161, Estimated End Time: 2023-07-10 23:10:33.888034
+2023-07-10 22:27:27,974 - main - INFO - Progress: 280/496, Elapsed Time: 1:03:14.822019, Estimated End Time: 2023-07-10 23:16:15.408832
+2023-07-10 22:31:47,191 - main - INFO - Progress: 290/496, Elapsed Time: 1:07:34.038886, Estimated End Time: 2023-07-10 23:19:46.956987
+2023-07-10 22:36:25,406 - main - INFO - Progress: 300/496, Elapsed Time: 1:12:12.253738, Estimated End Time: 2023-07-10 23:23:35.812191
+2023-07-10 22:41:20,064 - main - INFO - Progress: 310/496, Elapsed Time: 1:17:06.911620, Estimated End Time: 2023-07-10 23:27:36.211163
+2023-07-10 22:41:47,970 - main - INFO - Progress: 320/496, Elapsed Time: 1:17:34.818113, Estimated End Time: 2023-07-10 23:24:28.120782
+2023-07-10 22:42:19,479 - main - INFO - Progress: 330/496, Elapsed Time: 1:18:06.327302, Estimated End Time: 2023-07-10 23:21:36.844611
+2023-07-10 22:42:59,743 - main - INFO - Progress: 340/496, Elapsed Time: 1:18:46.591092, Estimated End Time: 2023-07-10 23:19:08.415013
+2023-07-10 22:47:08,885 - main - INFO - Progress: 350/496, Elapsed Time: 1:22:55.732778, Estimated End Time: 2023-07-10 23:21:44.476749
+2023-07-10 22:52:01,971 - main - INFO - Progress: 360/496, Elapsed Time: 1:27:48.818529, Estimated End Time: 2023-07-10 23:25:12.413718
+2023-07-10 22:57:03,179 - main - INFO - Progress: 370/496, Elapsed Time: 1:32:50.026844, Estimated End Time: 2023-07-10 23:28:39.999483
+2023-07-10 23:01:29,902 - main - INFO - Progress: 380/496, Elapsed Time: 1:37:16.749791, Estimated End Time: 2023-07-10 23:31:11.647116
+2023-07-10 23:06:04,422 - main - INFO - Progress: 390/496, Elapsed Time: 1:41:51.270092, Estimated End Time: 2023-07-10 23:33:45.434567
+2023-07-10 23:10:47,586 - main - INFO - Progress: 400/496, Elapsed Time: 1:46:34.433615, Estimated End Time: 2023-07-10 23:36:22.250316
+2023-07-10 23:12:34,602 - main - INFO - Progress: 410/496, Elapsed Time: 1:48:21.449486, Estimated End Time: 2023-07-10 23:35:18.320807
+2023-07-10 23:13:02,500 - main - INFO - Progress: 420/496, Elapsed Time: 1:48:49.347994, Estimated End Time: 2023-07-10 23:32:44.001723
+2023-07-10 23:13:39,598 - main - INFO - Progress: 430/496, Elapsed Time: 1:49:26.445533, Estimated End Time: 2023-07-10 23:30:27.471234
+2023-07-10 23:16:26,303 - main - INFO - Progress: 440/496, Elapsed Time: 1:52:13.151005, Estimated End Time: 2023-07-10 23:30:43.250138
+2023-07-10 23:21:03,373 - main - INFO - Progress: 450/496, Elapsed Time: 1:56:50.220398, Estimated End Time: 2023-07-10 23:32:59.973363
+2023-07-10 23:26:09,378 - main - INFO - Progress: 460/496, Elapsed Time: 2:01:56.225430, Estimated End Time: 2023-07-10 23:35:41.952235
+2023-07-10 23:30:51,023 - main - INFO - Progress: 470/496, Elapsed Time: 2:06:37.870929, Estimated End Time: 2023-07-10 23:37:51.331324
+2023-07-10 23:35:23,155 - main - INFO - Progress: 480/496, Elapsed Time: 2:11:10.003311, Estimated End Time: 2023-07-10 23:39:45.489388
+2023-07-10 23:40:11,834 - main - INFO - Progress: 490/496, Elapsed Time: 2:15:58.682355, Estimated End Time: 2023-07-10 23:41:51.737224
+2023-07-11 00:05:45,585 - main - INFO - Received request for OCR experiment
+2023-07-11 00:06:40,543 - main - INFO - Progress: 10/496, Elapsed Time: 0:00:54.956460, Estimated End Time: 2023-07-11 00:51:11.427857
+2023-07-11 00:07:02,540 - main - INFO - Progress: 20/496, Elapsed Time: 0:01:16.953231, Estimated End Time: 2023-07-11 00:37:34.027784
+2023-07-11 00:07:41,027 - main - INFO - Progress: 30/496, Elapsed Time: 0:01:55.439930, Estimated End Time: 2023-07-11 00:37:34.194439
+2023-07-11 00:08:36,186 - main - INFO - Progress: 40/496, Elapsed Time: 0:02:50.598658, Estimated End Time: 2023-07-11 00:41:01.010595
+2023-07-11 00:09:01,166 - main - INFO - Progress: 50/496, Elapsed Time: 0:03:15.578900, Estimated End Time: 2023-07-11 00:38:05.730129
+2023-07-11 00:09:39,015 - main - INFO - Progress: 60/496, Elapsed Time: 0:03:53.427668, Estimated End Time: 2023-07-11 00:37:55.256105
+2023-07-11 00:11:57,995 - main - INFO - Received request for OCR experiment
+2023-07-11 00:12:57,114 - main - INFO - Progress: 10/496, Elapsed Time: 0:00:59.118114, Estimated End Time: 2023-07-11 01:00:50.254720
+2023-07-11 00:13:24,963 - main - INFO - Progress: 20/496, Elapsed Time: 0:01:26.967020, Estimated End Time: 2023-07-11 00:47:54.778556
+2023-07-11 00:14:11,827 - main - INFO - Progress: 30/496, Elapsed Time: 0:02:13.830590, Estimated End Time: 2023-07-11 00:48:50.662370
+2023-07-11 00:15:11,855 - main - INFO - Progress: 40/496, Elapsed Time: 0:03:13.859064, Estimated End Time: 2023-07-11 00:52:01.849036
+2023-07-11 00:15:39,144 - main - INFO - Progress: 50/496, Elapsed Time: 0:03:41.147570, Estimated End Time: 2023-07-11 00:48:31.780176
+2023-07-11 00:16:16,994 - main - INFO - Progress: 60/496, Elapsed Time: 0:04:18.998301, Estimated End Time: 2023-07-11 00:47:39.048929
+2023-07-11 00:24:36,565 - main - INFO - Progress: 70/496, Elapsed Time: 0:12:38.569412, Estimated End Time: 2023-07-11 01:41:33.002628
+2023-07-11 00:30:35,661 - main - INFO - Progress: 80/496, Elapsed Time: 0:18:37.665348, Estimated End Time: 2023-07-11 02:07:27.521680
+2023-07-11 00:40:49,494 - main - INFO - Progress: 90/496, Elapsed Time: 0:28:51.498075, Estimated End Time: 2023-07-11 02:51:00.474943
+2023-07-11 00:44:55,305 - main - INFO - Progress: 100/496, Elapsed Time: 0:32:57.309403, Estimated End Time: 2023-07-11 02:55:25.451087
+2023-07-11 00:45:28,956 - main - INFO - Progress: 110/496, Elapsed Time: 0:33:30.960464, Estimated End Time: 2023-07-11 02:43:05.600098
+2023-07-11 00:46:04,853 - main - INFO - Progress: 120/496, Elapsed Time: 0:34:06.857344, Estimated End Time: 2023-07-11 02:32:58.340324
+2023-07-11 00:46:53,003 - main - INFO - Progress: 130/496, Elapsed Time: 0:34:55.007057, Estimated End Time: 2023-07-11 02:25:11.254191
+2023-07-11 00:47:23,109 - main - INFO - Progress: 140/496, Elapsed Time: 0:35:25.113215, Estimated End Time: 2023-07-11 02:17:26.968955
+2023-07-11 00:47:53,471 - main - INFO - Progress: 150/496, Elapsed Time: 0:35:55.475099, Estimated End Time: 2023-07-11 02:10:45.434123
+2023-07-11 00:53:20,225 - main - INFO - Progress: 160/496, Elapsed Time: 0:41:22.228615, Estimated End Time: 2023-07-11 02:20:12.905219
+2023-07-11 01:00:53,536 - main - INFO - Progress: 170/496, Elapsed Time: 0:48:55.540368, Estimated End Time: 2023-07-11 02:34:42.867338
+2023-07-11 01:09:02,568 - main - INFO - Progress: 180/496, Elapsed Time: 0:57:04.571771, Estimated End Time: 2023-07-11 02:49:14.594315
+2023-07-11 01:16:15,122 - main - INFO - Progress: 190/496, Elapsed Time: 1:04:17.125716, Estimated End Time: 2023-07-11 02:59:47.124748
+2023-07-11 01:16:59,379 - main - INFO - Progress: 200/496, Elapsed Time: 1:05:01.382774, Estimated End Time: 2023-07-11 02:53:13.425778
+2023-07-11 01:17:30,625 - main - INFO - Progress: 210/496, Elapsed Time: 1:05:32.629321, Estimated End Time: 2023-07-11 02:46:46.492297
+2023-07-11 01:18:15,596 - main - INFO - Progress: 220/496, Elapsed Time: 1:06:17.599974, Estimated End Time: 2023-07-11 02:41:25.676434
+2023-07-11 01:18:54,702 - main - INFO - Progress: 230/496, Elapsed Time: 1:06:56.705889, Estimated End Time: 2023-07-11 02:36:20.110123
+2023-07-11 01:19:19,891 - main - INFO - Progress: 240/496, Elapsed Time: 1:07:21.894767, Estimated End Time: 2023-07-11 02:31:11.245595
+2023-07-11 01:21:53,836 - main - INFO - Progress: 250/496, Elapsed Time: 1:09:55.840127, Estimated End Time: 2023-07-11 02:30:42.543393
+2023-07-11 01:31:09,067 - main - INFO - Progress: 260/496, Elapsed Time: 1:19:11.071466, Estimated End Time: 2023-07-11 02:43:01.578998
+2023-07-11 01:38:26,304 - main - INFO - Progress: 270/496, Elapsed Time: 1:26:28.308346, Estimated End Time: 2023-07-11 02:50:49.111088
+2023-07-11 01:51:11,973 - main - INFO - Progress: 280/496, Elapsed Time: 1:39:13.977490, Estimated End Time: 2023-07-11 03:07:45.042230
+2023-07-11 02:01:06,499 - main - INFO - Progress: 290/496, Elapsed Time: 1:49:08.503045, Estimated End Time: 2023-07-11 03:18:38.194775
+2023-07-11 02:07:21,347 - main - INFO - Progress: 300/496, Elapsed Time: 1:55:23.351382, Estimated End Time: 2023-07-11 03:22:44.604090
+2023-07-11 02:20:35,064 - main - INFO - Progress: 310/496, Elapsed Time: 2:08:37.068445, Estimated End Time: 2023-07-11 03:37:45.305939
+2023-07-11 02:22:19,988 - main - INFO - Progress: 320/496, Elapsed Time: 2:10:21.991576, Estimated End Time: 2023-07-11 03:34:02.083460
+2023-07-11 02:22:45,571 - main - INFO - Progress: 330/496, Elapsed Time: 2:10:47.575301, Estimated End Time: 2023-07-11 03:28:33.139907
+2023-07-11 02:23:30,284 - main - INFO - Progress: 340/496, Elapsed Time: 2:11:32.288140, Estimated End Time: 2023-07-11 03:23:51.452072
+2023-07-11 02:33:33,892 - main - INFO - Progress: 350/496, Elapsed Time: 2:21:35.896047, Estimated End Time: 2023-07-11 03:32:37.894901
+2023-07-11 02:39:58,153 - main - INFO - Progress: 360/496, Elapsed Time: 2:28:00.156640, Estimated End Time: 2023-07-11 03:35:52.878972
+2023-07-11 02:51:54,133 - main - INFO - Progress: 370/496, Elapsed Time: 2:39:56.136546, Estimated End Time: 2023-07-11 03:46:22.006510
+2023-07-11 03:02:27,837 - main - INFO - Progress: 380/496, Elapsed Time: 2:50:29.841496, Estimated End Time: 2023-07-11 03:54:30.631732
+2023-07-11 03:08:33,926 - main - INFO - Progress: 390/496, Elapsed Time: 2:56:35.930050, Estimated End Time: 2023-07-11 03:56:33.845916
+2023-07-11 03:19:02,106 - main - INFO - Progress: 400/496, Elapsed Time: 3:07:04.109661, Estimated End Time: 2023-07-11 04:03:55.892425
+2023-07-11 03:22:58,375 - main - INFO - Progress: 410/496, Elapsed Time: 3:11:00.379220, Estimated End Time: 2023-07-11 04:03:02.260064
+2023-07-11 03:23:26,246 - main - INFO - Progress: 420/496, Elapsed Time: 3:11:28.234516, Estimated End Time: 2023-07-11 03:58:05.054340
+2023-07-11 03:23:56,448 - main - INFO - Progress: 430/496, Elapsed Time: 3:11:58.451904, Estimated End Time: 2023-07-11 03:53:24.396766
+2023-07-11 03:30:12,527 - main - INFO - Progress: 440/496, Elapsed Time: 3:18:14.530985, Estimated End Time: 2023-07-11 03:55:26.376845
+2023-07-11 03:37:13,552 - main - INFO - Progress: 450/496, Elapsed Time: 3:25:15.555582, Estimated End Time: 2023-07-11 03:58:12.475488
+2023-07-11 03:46:04,904 - main - INFO - Progress: 460/496, Elapsed Time: 3:34:06.908176, Estimated End Time: 2023-07-11 04:02:50.314832
+2023-07-11 03:56:37,223 - main - INFO - Progress: 470/496, Elapsed Time: 3:44:39.227189, Estimated End Time: 2023-07-11 04:09:02.883031
+2023-07-11 04:04:01,810 - main - INFO - Progress: 480/496, Elapsed Time: 3:52:03.814452, Estimated End Time: 2023-07-11 04:11:45.938064
+2023-07-11 04:12:05,363 - main - INFO - Progress: 490/496, Elapsed Time: 4:00:07.366897, Estimated End Time: 2023-07-11 04:15:01.780097

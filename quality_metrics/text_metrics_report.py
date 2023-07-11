@@ -9,13 +9,14 @@ from quality_metrics.visualization import Visualization
 logger = logging.getLogger(__name__)
 
 class TextMetricsReport:
-    def __init__(self, ground_truths, ocr_texts, filenames, preprocess_steps):
+    def __init__(self, ground_truths=None, ocr_texts=None, filenames=None, preprocess_steps=None, all_metrics=None):
         self.ground_truths = ground_truths
         self.ocr_texts = ocr_texts
         self.filenames = filenames
         self.preprocess_steps = preprocess_steps
-        self.filename = None
+        self.all_metrics = all_metrics
         self.metrics = []
+        self.filename = None
 
     def generate_report(self):
         logger.info('Generating text metrics report')
@@ -69,3 +70,23 @@ class TextMetricsReport:
 
         vis = Visualization(df)
         vis.plot_metrics(save=False)
+
+    def write_to_csv(self):
+        current_time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+        self.filename = f'text_metrics_report.csv'
+        directory = "resources/reports"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        self.filename = os.path.join(directory, f'text_metrics_report_{current_time}.csv')
+
+        df = pd.DataFrame(self.all_metrics)
+
+        if os.path.isfile(self.filename):
+            df.to_csv(self.filename, mode='a', header=False, index=False)
+            logger.info(f"Added metrics to existing report {self.filename}")
+        else:
+            logger.info(df.head())
+            df.to_csv(self.filename, index=False)
+            logger.info(f"Created new report {self.filename}")
+

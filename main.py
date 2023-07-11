@@ -6,6 +6,7 @@ from fastapi import FastAPI, UploadFile, Request, File, Response, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from io import BytesIO
+from datetime import datetime, timedelta
 import re
 import os
 import shutil
@@ -13,6 +14,7 @@ from pdf2image import convert_from_path
 
 from ocr.tesseract import read_image
 from preprocessing.preprocessor import Preprocessor, ImagePipeline
+from quality_metrics.text_metrics import TextMetrics
 from quality_metrics.text_metrics_report import TextMetricsReport
 import logging
 
@@ -65,7 +67,6 @@ async def convert(images: List[UploadFile] = File(...)):
         processed_image = pipeline.process_image(processing_steps)
 
         text = await read_image(processed_image, 'deu')
-        processed_image.close()
         os.remove(filename)
         file_name = image.filename.split('.')[0] + '.txt'
         file_bytes = BytesIO(text.encode())
@@ -170,14 +171,13 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
     combinations = list(itertools.chain(*map(lambda x: itertools.combinations(preprocess_methods, x),
                                              range(0, len(preprocess_methods) + 1))))
 
-    reports = []
-    ocr_texts = []
-    ground_truths = []
-    preprocess_steps = []
-    filenames = []
-
+    all_metrics = []
+    i = 0
+    total_iterations = len(combinations) * len(ocr_files_dict)
+    start_time = datetime.now()
     for combo in combinations:
         for filename, ocr_file in ocr_files_dict.items():
+            preprocess_steps = []
             original_file = _store_file(ocr_file, ocr_file.filename)
             image_path = original_file[:-5] + ".jpeg"
             if ocr_file.content_type == 'application/pdf':
@@ -195,20 +195,39 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
             ocr_text = await read_image(processed_image, 'deu')
             gt_text = gt_files_dict[filename]
 
-            ground_truths.append(gt_text)
-            ocr_texts.append(ocr_text)
-            filenames.append(filename)
-            preprocess_steps.append(combo)
-            report = TextMetricsReport(ground_truths, ocr_texts, filenames, preprocess_steps)
-            report.generate_report()
-            reports.append(report.filename)  # Store report filename in list
+            preprocess_steps.append(' '.join(str(step) for step in combo) if len(combo) > 0 else 'No preprocessing')
+
+
+            tm = TextMetrics(gt_text, ocr_text)
+            wer = tm.wer()
+            cer = tm.cer()
+            lev_distance = tm.lev_distance()
+
+            all_metrics.append(
+                {'Index': i, 'Filename': filename, 'Preprocessing Steps': ', '.join(map(str, preprocess_steps)),
+                 'WER': wer, 'CER': cer,
+                 'Levenshtein Distance': lev_distance})
+            i += 1
+            # print progress
+            if i % 10 == 0:
+                current_time = datetime.now()
+                elapsed_time = current_time - start_time
+                avg_time_per_iteration = elapsed_time / i
+                remaining_iterations = total_iterations - i
+                estimated_end_time = current_time + avg_time_per_iteration * remaining_iterations
+                logger.info(f'Progress: {i}/{total_iterations}, Elapsed Time: {elapsed_time},'
+                            f' Estimated End Time: {estimated_end_time}')
 
     for ocr_file, gt_file in zip(ocr_files, gt_files):
         await ocr_file.close()
         await gt_file.close()
 
-    return FileResponse(reports[-1], media_type='text/csv',
-                        headers={"Content-Disposition": f"attachment;filename={reports[-1]}"})
+    logging.info(all_metrics)
+    report = TextMetricsReport(all_metrics=all_metrics)
+    report.write_to_csv()
+
+    return FileResponse(report.filename, media_type='text/csv',
+                        headers={"Content-Disposition": f"attachment;filename={report.filename}"})
 
 
 def _store_file(file, name):
