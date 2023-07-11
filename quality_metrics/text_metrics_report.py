@@ -8,6 +8,7 @@ from quality_metrics.visualization import Visualization
 
 logger = logging.getLogger(__name__)
 
+
 class TextMetricsReport:
     def __init__(self, ground_truths=None, ocr_texts=None, filenames=None, preprocess_steps=None, all_metrics=None):
         self.ground_truths = ground_truths
@@ -89,4 +90,40 @@ class TextMetricsReport:
             logger.info(df.head())
             df.to_csv(self.filename, index=False)
             logger.info(f"Created new report {self.filename}")
+
+    def process_result(self, filename):
+        # Read the CSV file
+        data = pd.read_csv(filename, sep=';')
+
+        # Find the rows where there is no preprocessing
+        no_preprocessing = data[data['Preprocessing Steps'] == 'No preprocessing']
+        no_preprocessing.set_index('Filename', inplace=True)
+
+        def calculate_improvement(row):
+            no_preprocessing_row = no_preprocessing.loc[row['Filename']]
+            row['WER Improvement (%)'] = (no_preprocessing_row['WER'] - row['WER']) / no_preprocessing_row['WER'] * 100
+            row['CER Improvement (%)'] = (no_preprocessing_row['CER'] - row['CER']) / no_preprocessing_row['CER'] * 100
+            row['Levenshtein Distance Improvement (%)'] = (no_preprocessing_row['Levenshtein Distance'] - row[
+                'Levenshtein Distance']) / no_preprocessing_row['Levenshtein Distance'] * 100
+            return row
+
+        improvement_data = data.apply(calculate_improvement, axis=1)
+
+        grouped = improvement_data.groupby('Filename')
+        max_wer_improvement = grouped['WER Improvement (%)'].idxmax()
+        max_cer_improvement = grouped['CER Improvement (%)'].idxmax()
+        max_levenshtein_improvement = grouped['Levenshtein Distance Improvement (%)'].idxmax()
+
+        best_preprocessing = pd.concat([
+            improvement_data.loc[max_wer_improvement],
+            improvement_data.loc[max_cer_improvement],
+            improvement_data.loc[max_levenshtein_improvement]
+        ])
+
+        directory = "resources/reports"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        self.filename = os.path.join(directory, f'text_metrics_report_output.csv')
+        best_preprocessing.to_csv(self.filename, sep=',', index=False)
+        return self.filename
 

@@ -1,6 +1,10 @@
+import io
 import itertools
+from urllib import request
 
-from starlette.responses import FileResponse
+import pandas as pd
+from flask import send_file
+from starlette.responses import FileResponse, StreamingResponse
 from typing import List
 from fastapi import FastAPI, UploadFile, Request, File, Response, HTTPException
 from fastapi.templating import Jinja2Templates
@@ -197,7 +201,6 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
 
             preprocess_steps.append(' '.join(str(step) for step in combo) if len(combo) > 0 else 'No preprocessing')
 
-
             tm = TextMetrics(gt_text, ocr_text)
             wer = tm.wer()
             cer = tm.cer()
@@ -228,6 +231,19 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
 
     return FileResponse(report.filename, media_type='text/csv',
                         headers={"Content-Disposition": f"attachment;filename={report.filename}"})
+
+
+@app.post('/process_results')
+async def process_csv(request: Request):
+    form = await request.form()
+    csv_file = form["file"]
+
+    filename = _store_file(csv_file, csv_file.filename)
+    report = TextMetricsReport()
+    result_filename = report.process_result(filename)
+
+    # Return the file
+    return FileResponse(result_filename, media_type='text/csv')
 
 
 def _store_file(file, name):

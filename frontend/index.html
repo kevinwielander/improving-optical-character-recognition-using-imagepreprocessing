@@ -39,6 +39,9 @@
           <li class="nav-item" id="nav-experiment">
             <a class="nav-link" href="#" onclick="showForm('experiment')">Experiment</a>
           </li>
+          <li class="nav-item" id="nav-process-csv">
+            <a class="nav-link" href="#" onclick="showForm('process-csv')">Process Experiment Results</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -93,10 +96,50 @@
               Run Experiment
           </button>
         </div>
+        <!-- Process CSV form -->
+        <div id="process-csv-form" class="col-md-6 offset-md-3 hidden">
+          <div class="form-group">
+            <label for="file-upload-csv">Upload CSV:</label>
+            <input type="file" class="form-control-file" id="file-upload-csv" accept=".csv" />
+            <small class="form-text text-muted">Only .csv files are allowed.</small>
+          </div>
+          <button class="btn btn-primary btn-block mt-3" onclick="processCSV()">
+              Process Experiment
+          </button>
+        </div>
       </div>
     </div>
   </body>
   <script>
+    function processCSV() {
+      const input = document.getElementById("file-upload-csv");
+      const file = input.files[0];
+      const formData = new FormData();
+
+      if(!file) {
+        swal("Error", "No CSV file provided", "error");
+      } else {
+        formData.append("file", file);
+
+        $.ajax({
+            type: 'POST',
+            url: '/process_results',
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response) {
+                swal("Success", "CSV file has been processed");
+                let blob = new Blob([response]);
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "processed.csv";
+                link.click();
+            }
+        });
+      }
+    }
+
     function requestMetrics() {
       const ocrInput = document.getElementById("file-upload-ocr");
       const ocrFiles = ocrInput.files;
@@ -209,15 +252,26 @@
         document.getElementById('convert-form').style.display = 'block';
         document.getElementById('evaluation-form').style.display = 'none';
         document.getElementById('experiment-form').style.display = 'none';
+        document.getElementById('process-csv-form').style.display = 'none';
+
       } else if(formId === 'evaluation') {
         document.getElementById('evaluation-form').style.display = 'block';
         document.getElementById('convert-form').style.display = 'none';
         document.getElementById('experiment-form').style.display = 'none';
+        document.getElementById('process-csv-form').style.display = 'none';
+
       }
       else if(formId === 'experiment') {
         document.getElementById('experiment-form').style.display = 'block';
         document.getElementById('convert-form').style.display = 'none';
         document.getElementById('evaluation-form').style.display = 'none';
+        document.getElementById('process-csv-form').style.display = 'none';
+      }
+      else if(formId === 'process-csv') {
+        document.getElementById('process-csv-form').style.display = 'block';
+        document.getElementById('convert-form').style.display = 'none';
+        document.getElementById('evaluation-form').style.display = 'none';
+        document.getElementById('experiment-form').style.display = 'none';
       }
     }
     $('.navbar-nav .nav-link').click(function (e) {
