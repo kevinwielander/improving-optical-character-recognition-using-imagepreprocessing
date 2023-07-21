@@ -156,6 +156,9 @@ class TextMetricsReport:
         new_df = pd.DataFrame(new_data, columns=['Image Number', 'Baseline ' + metric, 'Best ' + metric,
                                                  'Preprocessing Steps for Best ' + metric, 'Improvement in Percent'])
 
+        vis = Visualization(new_df)
+        vis.plot_histogram(save=False)
+
         directory = "resources/reports"
         if not os.path.exists(directory):
             os.makedirs(directory)
