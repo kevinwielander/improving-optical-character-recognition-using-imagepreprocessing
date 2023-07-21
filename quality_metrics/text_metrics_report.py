@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import os
 from datetime import datetime
@@ -91,39 +92,75 @@ class TextMetricsReport:
             df.to_csv(self.filename, index=False)
             logger.info(f"Created new report {self.filename}")
 
-    def process_result(self, filename):
-        # Read the CSV file
-        data = pd.read_csv(filename, sep=';')
 
-        # Find the rows where there is no preprocessing
-        no_preprocessing = data[data['Preprocessing Steps'] == 'No preprocessing']
-        no_preprocessing.set_index('Filename', inplace=True)
+    def analyze_experiment(self, filename, metric='Levenshtein Distance'):
+        # Convert the file to a DataFrame
+        df = pd.read_csv(filename, sep=';')
 
-        def calculate_improvement(row):
-            no_preprocessing_row = no_preprocessing.loc[row['Filename']]
-            row['WER Improvement (%)'] = (no_preprocessing_row['WER'] - row['WER']) / no_preprocessing_row['WER'] * 100
-            row['CER Improvement (%)'] = (no_preprocessing_row['CER'] - row['CER']) / no_preprocessing_row['CER'] * 100
-            row['Levenshtein Distance Improvement (%)'] = (no_preprocessing_row['Levenshtein Distance'] - row[
-                'Levenshtein Distance']) / no_preprocessing_row['Levenshtein Distance'] * 100
-            return row
+        # Initialize a list to store the new data
+        new_data = []
+        improvements = []
 
-        improvement_data = data.apply(calculate_improvement, axis=1)
+        # Get all unique image numbers
+        image_numbers = df['Filename'].unique()
 
-        grouped = improvement_data.groupby('Filename')
-        max_wer_improvement = grouped['WER Improvement (%)'].idxmax()
-        max_cer_improvement = grouped['CER Improvement (%)'].idxmax()
-        max_levenshtein_improvement = grouped['Levenshtein Distance Improvement (%)'].idxmax()
+        # For each image number
+        for num in image_numbers:
+            # Filter rows for current image number
+            image_data = df[df['Filename'] == num]
 
-        best_preprocessing = pd.concat([
-            improvement_data.loc[max_wer_improvement],
-            improvement_data.loc[max_cer_improvement],
-            improvement_data.loc[max_levenshtein_improvement]
-        ])
+            # Get the row with 'No preprocessing' (baseline)
+            baseline_row = image_data[image_data['Preprocessing Steps'] == 'No preprocessing']
+
+            # Get the baseline metric
+            baseline_metric = baseline_row[metric].values[0]
+
+            # Get the row with the best (minimum) metric
+            best_row = image_data[image_data[metric] == image_data[metric].min()]
+
+            # Get the best metric and corresponding preprocessing steps
+            best_metric = best_row[metric].values[0]
+            best_preprocessing = best_row['Preprocessing Steps'].values[0]
+
+            # Calculate the improvement in percent and round to 2 decimal places
+            improvement = round((baseline_metric - best_metric) / baseline_metric * 100, 2)
+
+            # Append the improvement to the improvements list
+            improvements.append(improvement)
+
+            # Append the data for this image number to the list
+            new_data.append([num, baseline_metric, best_metric, best_preprocessing, improvement])
+
+        # Calculate the average, median, min, max, and standard deviation of the improvements
+        average_improvement = round(np.average(improvements), 2)
+        median_improvement = round(np.median(improvements), 2)
+        min_improvement = round(np.min(improvements), 2)
+        max_improvement = round(np.max(improvements), 2)
+        std_dev_improvement = round(np.std(improvements), 2)
+
+        # Find the best and worst preprocessing steps
+        best_preprocessing_steps = max(new_data, key=lambda x: x[-1])[3]
+        worst_preprocessing_steps = min(new_data, key=lambda x: x[-1])[3]
+
+        # Append the calculated statistics to the list
+        placeholder = '---'
+        new_data.append([placeholder, placeholder, placeholder, 'Average Improvement:', average_improvement])
+        new_data.append([placeholder, placeholder, placeholder, 'Median Improvement:', median_improvement])
+        new_data.append([placeholder, placeholder, placeholder, 'Min Improvement:', min_improvement])
+        new_data.append([placeholder, placeholder, placeholder, 'Max Improvement:', max_improvement])
+        new_data.append([placeholder, placeholder, placeholder, 'Std Dev Improvement:', std_dev_improvement])
+        new_data.append([placeholder, placeholder, placeholder, 'Best Preprocessing Steps:', best_preprocessing_steps])
+        new_data.append([placeholder, placeholder, placeholder, 'Worst Preprocessing Steps:', worst_preprocessing_steps])
+
+        # Convert the list to a DataFrame
+        new_df = pd.DataFrame(new_data, columns=['Image Number', 'Baseline ' + metric, 'Best ' + metric,
+                                                 'Preprocessing Steps for Best ' + metric, 'Improvement in Percent'])
 
         directory = "resources/reports"
         if not os.path.exists(directory):
             os.makedirs(directory)
         self.filename = os.path.join(directory, f'text_metrics_report_output.csv')
-        best_preprocessing.to_csv(self.filename, sep=',', index=False)
+        new_df.to_csv(self.filename, sep=';', index=False)
+
         return self.filename
 

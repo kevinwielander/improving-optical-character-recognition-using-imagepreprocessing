@@ -103,6 +103,14 @@
             <input type="file" class="form-control-file" id="file-upload-csv" accept=".csv" />
             <small class="form-text text-muted">Only .csv files are allowed.</small>
           </div>
+          <div class="form-group">
+              <label for="metric-select">Select Metric:</label>
+              <select class="form-control" id="metric-select">
+                  <option value="WER">Word Error Rate (WER)</option>
+                  <option value="CER">Character Error Rate (CER)</option>
+                  <option value="Levenshtein Distance">Levenshtein Distance</option>
+              </select>
+          </div>
           <button class="btn btn-primary btn-block mt-3" onclick="processCSV()">
               Process Experiment
           </button>
@@ -112,14 +120,16 @@
   </body>
   <script>
     function processCSV() {
-      const input = document.getElementById("file-upload-csv");
-      const file = input.files[0];
-      const formData = new FormData();
+    const input = document.getElementById("file-upload-csv");
+    const file = input.files[0];
+    const metric = document.getElementById("metric-select").value; // Get selected metric
+    const formData = new FormData();
 
-      if(!file) {
+    if(!file) {
         swal("Error", "No CSV file provided", "error");
-      } else {
+    } else {
         formData.append("file", file);
+        formData.append("metric", metric); // Append selected metric
 
         $.ajax({
             type: 'POST',
@@ -137,8 +147,9 @@
                 link.click();
             }
         });
-      }
     }
+  }
+
 
     function requestMetrics() {
       const ocrInput = document.getElementById("file-upload-ocr");

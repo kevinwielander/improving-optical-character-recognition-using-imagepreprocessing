@@ -237,13 +237,15 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
 async def process_csv(request: Request):
     form = await request.form()
     csv_file = form["file"]
+    metric = form["metric"]  # Get selected metric
 
     filename = _store_file(csv_file, csv_file.filename)
     report = TextMetricsReport()
-    result_filename = report.process_result(filename)
+    result_filename = report.analyze_experiment(filename, metric)
 
     # Return the file
     return FileResponse(result_filename, media_type='text/csv')
+
 
 
 def _store_file(file, name):
