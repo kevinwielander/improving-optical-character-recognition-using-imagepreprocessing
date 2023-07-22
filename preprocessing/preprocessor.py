@@ -16,7 +16,6 @@ class Preprocessor:
         self.image = cv2.imread(self.copy_image_path)
 
     def _create_copy(self, image_path):
-
         # generate a new path for the copy
         directory, filename = os.path.split(image_path)
         basename, ext = os.path.splitext(filename)
@@ -39,16 +38,18 @@ class Preprocessor:
         logger.info("Image converted to grayscale. Shape: %s", self.image.shape)
 
     def check_and_scale_dpi(self):
-        with Image.open(self.image_path) as img:
+        with Image.open(self.copy_image_path) as img:
+            img.load()  # Load image data into memory
             dpi = img.info.get('dpi')
         if dpi is None:
             dpi = (72, 72)
         current_dpi = max(dpi)
         if current_dpi < 300:
             scaling_factor = 300.0 / current_dpi
-            resized_image = cv2.resize(self.image, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_CUBIC)
-            self.image = resized_image
-        logger.info("Checked and scaled DPI. Initial DPI: %s", current_dpi)
+            img = img.resize((int(img.size[0] * scaling_factor), int(img.size[1] * scaling_factor)), Image.ANTIALIAS)
+            logger.info("Checked and scaled DPI. Initial DPI: %s", current_dpi)
+
+        self.image = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
     def apply_filter(self):
         img = cv2.GaussianBlur(self.image, (5, 5), 0)
@@ -70,27 +71,4 @@ class Preprocessor:
     def apply_thresholding(self):
         img = cv2.threshold(self.image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
         self.image = img
-
-
-class ImagePipeline:
-    def __init__(self, preprocessor):
-        logger.info('Initialized Image Pipeline')
-        self.preprocessor = preprocessor
-
-    def process_image(self, steps):
-        # Always apply grayscale and scaling
-        self.preprocessor.check_and_scale_dpi()
-        self.preprocessor.to_grayscale()
-
-        method_map = {
-            'filter': self.preprocessor.apply_filter,
-            'non_local_means': self.preprocessor.apply_non_local_means,
-            'morphological_operation': self.preprocessor.apply_morphological_operation,
-            'thresholding': self.preprocessor.apply_thresholding
-        }
-        for step in steps:
-            method_map[step]()
-        processed_image = self.preprocessor.image
-        logger.info("Image preprocessing of Image Pipeline complete.")
-        self.preprocessor.delete_copy()
-        return processed_image
+        logger.info("Applied thresholding.")

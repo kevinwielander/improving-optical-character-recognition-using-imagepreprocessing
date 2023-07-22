@@ -1,4 +1,3 @@
-
 import itertools
 from starlette.responses import FileResponse
 from typing import List
@@ -7,15 +6,15 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from io import BytesIO
 from datetime import datetime
-import re
 import os
-import shutil
 from pdf2image import convert_from_path
 
 from ocr.tesseract import read_image
-from preprocessing.preprocessor import Preprocessor, ImagePipeline
+from preprocessing.image_pipeline import ImagePipeline
 from quality_metrics.text_metrics import TextMetrics
 from quality_metrics.text_metrics_report import TextMetricsReport
+from utils.config import PREPROCESSING_STEPS
+from utils.helpers import prepare_file_dicts, store_file
 import logging
 
 # Create a logger
@@ -39,7 +38,6 @@ app = FastAPI(debug=True)
 logging.basicConfig(level=logging.INFO)
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 frontend = Jinja2Templates(directory="frontend")
-path = "temp"
 
 
 @app.get("/")
@@ -56,7 +54,7 @@ async def convert(images: List[UploadFile] = File(...)):
         raise HTTPException(status_code=400, detail="No images provided")
     results = []
     for image in images:
-        filename = _store_file(image, image.filename)
+        filename = store_file(image, image.filename)
         if image.content_type == 'application/pdf':
             images_from_pdf = convert_from_path(filename)
             image_path = filename[:-4] + ".jpeg"
@@ -64,12 +62,8 @@ async def convert(images: List[UploadFile] = File(...)):
             filename = image_path
 
         # Preprocess the image
-        preprocessor = Preprocessor(filename)
-        pipeline = ImagePipeline(preprocessor)
-        processing_steps = ['filter', 'non_local_means', 'morphological_operation', 'thresholding']
-        processed_image = pipeline.process_image(processing_steps)
+        text = await process_and_read_image(filename, PREPROCESSING_STEPS)  # Add 'await' here
 
-        text = await read_image(processed_image, 'deu')
         os.remove(filename)
         file_name = image.filename.split('.')[0] + '.txt'
         file_bytes = BytesIO(text.encode())
@@ -85,56 +79,34 @@ async def text_metrics_report(ocr_files: List[UploadFile] = File(...), gt_files:
         logger.warning('No text files provided')
         raise HTTPException(status_code=400, detail="No text files provided")
 
-    def get_file_number(filename):
-        # Split at the dot to separate the base from the extension
-        base, _ = os.path.splitext(filename)
-        # Get the trailing numbers using a regular expression
-        match = re.search(r'\d+$', base)
-        # Return the matched numbers or None if no numbers were found
-        return match.group() if match else None
+    ocr_files_dict, gt_files_dict = prepare_file_dicts(ocr_files, gt_files)
 
-    ocr_files_dict = {get_file_number(ocr_file.filename): ocr_file for ocr_file in ocr_files}
-    gt_files_dict = {get_file_number(gt_file.filename): gt_file for gt_file in gt_files}
-
-    for file_number in ocr_files_dict.keys():
-        if file_number not in gt_files_dict:
-            logger.error(f"No matching ground truth file found for OCR file number {file_number}")
-            raise HTTPException(status_code=400,
-                                detail=f"No matching ground truth file found for OCR file number {file_number}")
     ocr_texts = []
     ground_truths = []
     filenames = []
     for filename, ocr_file in ocr_files_dict.items():
-        gt_file = gt_files_dict[filename]
+        gt_text = gt_files_dict[filename]
 
         # Store the file locally for processing
-        file_to_process = _store_file(ocr_file, ocr_file.filename)
+        file_to_process = store_file(ocr_file, ocr_file.filename)
         if ocr_file.content_type == 'application/pdf':
             images_from_pdf = convert_from_path(file_to_process)
             image_path = file_to_process[:-4] + ".jpeg"
             images_from_pdf[0].save(image_path, 'JPEG')
             file_to_process = image_path
 
-        # Preprocess the image
-        preprocessor = Preprocessor(file_to_process)
-        pipeline = ImagePipeline(preprocessor)
-        processing_steps = ['filter', 'non_local_means', 'morphological_operation', 'thresholding']
-        processed_image = pipeline.process_image(processing_steps)
-
-        # Perform OCR and store the result
-        ocr_text = await read_image(processed_image, 'deu')
-
-        # Read the ground truth text
-        gt_text = await gt_file.read()
+        # Preprocess the image and perform OCR
+        ocr_text = await process_and_read_image(file_to_process, PREPROCESSING_STEPS)
 
         ocr_texts.append(ocr_text)
-        ground_truths.append(gt_text.decode('utf-8'))
+        ground_truths.append(gt_text)
         filenames.append(filename)
 
         # Delete the temporary file
         os.remove(file_to_process)
 
-    report = TextMetricsReport(ground_truths, ocr_texts, filenames, processing_steps)
+    logger.error(PREPROCESSING_STEPS)
+    report = TextMetricsReport(ground_truths, ocr_texts, filenames, PREPROCESSING_STEPS)
     report.generate_report()
 
     for ocr_file, gt_file in zip(ocr_files, gt_files):
@@ -152,25 +124,9 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
         logger.warning('No text files provided')
         raise HTTPException(status_code=400, detail="No text files provided")
 
-    def get_file_number(filename):
-        base, _ = os.path.splitext(filename)
-        match = re.search(r'\d+$', base)
-        return match.group() if match else None
+    ocr_files_dict, gt_files_dict = prepare_file_dicts(ocr_files, gt_files)
 
-    ocr_files_dict = {get_file_number(ocr_file.filename): ocr_file for ocr_file in ocr_files}
-    gt_files_dict = {}
-    for gt_file in gt_files:
-        content = await gt_file.read()
-        content = content.decode('utf-8')
-        gt_files_dict[get_file_number(gt_file.filename)] = content
-
-    for file_number in ocr_files_dict.keys():
-        if file_number not in gt_files_dict:
-            logger.error(f"No matching ground truth file found for OCR file number {file_number}")
-            raise HTTPException(status_code=400,
-                                detail=f"No matching ground truth file found for OCR file number {file_number}")
-
-    preprocess_methods = ['filter', 'non_local_means', 'morphological_operation', 'thresholding']
+    preprocess_methods = PREPROCESSING_STEPS
     combinations = list(itertools.chain(*map(lambda x: itertools.combinations(preprocess_methods, x),
                                              range(0, len(preprocess_methods) + 1))))
 
@@ -181,21 +137,20 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
     for combo in combinations:
         for filename, ocr_file in ocr_files_dict.items():
             preprocess_steps = []
-            original_file = _store_file(ocr_file, ocr_file.filename)
+            original_file = store_file(ocr_file, ocr_file.filename)
+            logger.error('original_file')
+            logger.error(original_file)
             image_path = original_file[:-5] + ".jpeg"
             if ocr_file.content_type == 'application/pdf':
                 if not os.path.exists(image_path):  # Checking if the image already exists
                     images_from_pdf = convert_from_path(original_file)
                     images_from_pdf[0].save(image_path, 'JPEG')
             file_to_process = image_path
+            logger.error('file_to_process')
+            logger.error(file_to_process)
+            # Apply selected preprocessing methods via pipeline and perform OCR
+            ocr_text = await process_and_read_image(file_to_process, combo)
 
-            preprocessor = Preprocessor(file_to_process)
-            image_pipeline = ImagePipeline(preprocessor)
-
-            # Apply selected preprocessing methods via pipeline
-            processed_image = image_pipeline.process_image(combo)
-
-            ocr_text = await read_image(processed_image, 'deu')
             gt_text = gt_files_dict[filename]
 
             preprocess_steps.append(' '.join(str(step) for step in combo) if len(combo) > 0 else 'No preprocessing')
@@ -225,9 +180,8 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
         await gt_file.close()
 
     logging.info(all_metrics)
-    report = TextMetricsReport(all_metrics=all_metrics)
-    report.write_to_csv()
-
+    report = TextMetricsReport(all_metrics, PREPROCESSING_STEPS)
+    report.generate_report()
     return FileResponse(report.filename, media_type='text/csv',
                         headers={"Content-Disposition": f"attachment;filename={report.filename}"})
 
@@ -238,7 +192,7 @@ async def process_csv(request: Request):
     csv_file = form["file"]
     metric = form["metric"]  # Get selected metric
 
-    filename = _store_file(csv_file, csv_file.filename)
+    filename = store_file(csv_file, csv_file.filename)
     report = TextMetricsReport()
     result_filename = report.analyze_experiment(filename, metric)
 
@@ -246,15 +200,7 @@ async def process_csv(request: Request):
     return FileResponse(result_filename, media_type='text/csv')
 
 
-
-def _store_file(file, name):
-    temp_file = os.path.join(path, name)
-    # Check if the file already exists
-    if not os.path.isfile(temp_file):
-        with open(temp_file, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-    return temp_file
-
-
-def copy_file(original_path, new_path):
-    shutil.copy2(original_path, new_path)
+async def process_and_read_image(image_path, preprocess_steps=[]):
+    preprocess_pipeline = ImagePipeline(image_path, preprocess_steps)
+    preprocessed_image = preprocess_pipeline.process_image()
+    return await read_image(preprocessed_image)

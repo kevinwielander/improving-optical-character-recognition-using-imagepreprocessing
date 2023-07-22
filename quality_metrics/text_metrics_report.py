@@ -6,7 +6,7 @@ from datetime import datetime
 import logging
 from quality_metrics.text_metrics import TextMetrics
 from quality_metrics.visualization import Visualization
-
+from utils.config import REPORTS_PATH
 logger = logging.getLogger(__name__)
 
 
@@ -21,15 +21,18 @@ class TextMetricsReport:
         self.metrics = []
         self.filename = None
 
+
     def generate_report(self):
         logger.info('Generating text metrics report')
         current_time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-        self.filename = f'resources/text_metrics_report_{current_time}.csv'
+        self.filename = REPORTS_PATH+f'/text_metrics_report_{current_time}.csv'
 
         total_cer, total_wer, total_lev_distance = 0, 0, 0
         total_characters, total_words = 0, 0
-        for i, (gt, ocr, fname, steps) in enumerate(
-                zip(self.ground_truths, self.ocr_texts, self.filenames, self.preprocess_steps)):
+        steps = ', '.join(self.preprocess_steps)
+        for i, (gt, ocr, fname) in enumerate(
+                zip(self.ground_truths, self.ocr_texts, self.filenames)):
+
             tm = TextMetrics(gt, ocr)
             wer = tm.wer()
             cer = tm.cer()
@@ -42,7 +45,7 @@ class TextMetricsReport:
             total_words += len(ocr.split())
 
             self.metrics.append(
-                {'Index': i, 'Filename': fname, 'Preprocessing Steps': ', '.join(steps), 'WER': wer, 'CER': cer,
+                {'Index': i, 'Filename': fname, 'Preprocessing Steps': steps, 'WER': wer, 'CER': cer,
                  'Levenshtein Distance': lev_distance})
 
         logger.info(f"Computed metrics for {len(self.metrics)} files")
@@ -57,12 +60,11 @@ class TextMetricsReport:
         df = pd.DataFrame(self.metrics)
 
         # Create the directory if it does not exist
-        directory = "resources/reports"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        if not os.path.exists(REPORTS_PATH):
+            os.makedirs(REPORTS_PATH)
 
         # Create the filename with the directory
-        self.filename = os.path.join(directory, f'text_metrics_report_{current_time}.csv')
+        self.filename = os.path.join(REPORTS_PATH, f'text_metrics_report_{current_time}.csv')
 
         if os.path.isfile(self.filename):
             df.to_csv(self.filename, mode='a', header=False, index=False)
@@ -77,11 +79,10 @@ class TextMetricsReport:
     def write_to_csv(self):
         current_time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
         self.filename = f'text_metrics_report.csv'
-        directory = "resources/reports"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        if not os.path.exists(REPORTS_PATH):
+            os.makedirs(REPORTS_PATH)
 
-        self.filename = os.path.join(directory, f'text_metrics_report_{current_time}.csv')
+        self.filename = os.path.join(REPORTS_PATH, f'text_metrics_report_{current_time}.csv')
 
         df = pd.DataFrame(self.all_metrics)
 
@@ -167,10 +168,9 @@ class TextMetricsReport:
         vis = Visualization(new_df)
         vis.plot_histogram(save=False)
 
-        directory = "resources/reports"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        self.filename = os.path.join(directory, f'text_metrics_report_output.csv')
+        if not os.path.exists(REPORTS_PATH):
+            os.makedirs(REPORTS_PATH)
+        self.filename = os.path.join(REPORTS_PATH, f'text_metrics_report_output.csv')
         new_df.to_csv(self.filename, sep=';', index=False)
 
         logger.info(f'Finished analysis of experiment. Results saved to {self.filename}')

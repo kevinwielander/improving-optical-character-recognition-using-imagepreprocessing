@@ -2,6 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
+from utils.config import PLOTS_PATH
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,9 +35,9 @@ class Visualization:
 
         if save:
             logger.info('Saving Metrics')
-            if not os.path.exists("resources/plots"):
-                os.makedirs("resources/plots")
-            plt.savefig(f"resources/plots/metrics_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
+            if not os.path.exists(PLOTS_PATH):
+                os.makedirs(PLOTS_PATH)
+            plt.savefig(PLOTS_PATH+"/metrics_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
         #plt.show()
 
     def plot_histogram(self, save=False):
@@ -54,9 +55,9 @@ class Visualization:
 
         if save:
             logger.info('Saving Histogram Metrics')
-            if not os.path.exists("resources/plots"):
-                os.makedirs("resources/plots")
-            plt.savefig(f"resources/plots/histogram_improvement{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
+            if not os.path.exists(PLOTS_PATH):
+                os.makedirs(PLOTS_PATH)
+            plt.savefig(PLOTS_PATH+f"/histogram_improvement{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
 
         # Show the plot
         #plt.show()
