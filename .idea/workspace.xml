@@ -5,14 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3dedc67-c00c-4740-8acc-e980b3709972" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/preprocessing/image_pipeline.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/improving-optical-character-recognition-using-imagepreprocessing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/improving-optical-character-recognition-using-imagepreprocessing.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/tesseract.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocr/tesseract.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/preprocessing/preprocessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quality_metrics/text_metrics_report.py" beforeDir="false" afterPath="$PROJECT_DIR$/quality_metrics/text_metrics_report.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quality_metrics/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/quality_metrics/visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/temp/image00.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/temp/image00_copy.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/helpers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

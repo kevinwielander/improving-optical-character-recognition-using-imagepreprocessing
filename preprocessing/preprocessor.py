@@ -11,9 +11,8 @@ logger = logging.getLogger(__name__)
 class Preprocessor:
     def __init__(self, image_path):
         logger.info('Initialized Preprocessor')
-        self.image_path = image_path
-        self.copy_image_path = self._create_copy(image_path)
-        self.image = cv2.imread(self.copy_image_path)
+        self.image_path = self._create_copy(image_path)
+        self.image = cv2.imread(self.image_path)
 
     def _create_copy(self, image_path):
         # generate a new path for the copy
@@ -28,8 +27,8 @@ class Preprocessor:
         return new_path
 
     def delete_copy(self):
-        if os.path.exists(self.copy_image_path):
-            os.remove(self.copy_image_path)
+        if os.path.exists(self.image_path):
+            os.remove(self.image_path)
         self.image = None
 
     def to_grayscale(self):
@@ -38,7 +37,7 @@ class Preprocessor:
         logger.info("Image converted to grayscale. Shape: %s", self.image.shape)
 
     def check_and_scale_dpi(self):
-        with Image.open(self.copy_image_path) as img:
+        with Image.open(self.image_path) as img:
             img.load()  # Load image data into memory
             dpi = img.info.get('dpi')
         if dpi is None:
@@ -48,8 +47,9 @@ class Preprocessor:
             scaling_factor = 300.0 / current_dpi
             img = img.resize((int(img.size[0] * scaling_factor), int(img.size[1] * scaling_factor)), Image.ANTIALIAS)
             logger.info("Checked and scaled DPI. Initial DPI: %s", current_dpi)
+            img.save(self.image_path)  # Save the scaled image back to the file
 
-        self.image = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+        self.image = cv2.imread(self.image_path)  # Reload the image from the file
 
     def apply_filter(self):
         img = cv2.GaussianBlur(self.image, (5, 5), 0)

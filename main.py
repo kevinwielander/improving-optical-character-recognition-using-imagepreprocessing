@@ -13,7 +13,7 @@ from ocr.tesseract import read_image
 from preprocessing.image_pipeline import ImagePipeline
 from quality_metrics.text_metrics import TextMetrics
 from quality_metrics.text_metrics_report import TextMetricsReport
-from utils.config import PREPROCESSING_STEPS
+from utils.config import PREPROCESSING_STEPS, LOGS_PATH, LOG_FILE
 from utils.helpers import prepare_file_dicts, store_file
 import logging
 
@@ -23,8 +23,10 @@ logger = logging.getLogger(__name__)
 # Set global level of logger. Can be overridden by individual handlers by setting their levels
 logger.setLevel(logging.INFO)
 
+os.makedirs(LOGS_PATH, exist_ok=True)
 # Create a file handler
-handler = logging.FileHandler('logs/app.log')
+
+handler = logging.FileHandler(os.path.join(LOGS_PATH, LOG_FILE))
 handler.setLevel(logging.INFO)
 
 # Create a logging format
@@ -96,16 +98,17 @@ async def text_metrics_report(ocr_files: List[UploadFile] = File(...), gt_files:
             file_to_process = image_path
 
         # Preprocess the image and perform OCR
-        ocr_text = await process_and_read_image(file_to_process, PREPROCESSING_STEPS)
+        try:
+            # Preprocess the image and perform OCR
+            ocr_text = await process_and_read_image(file_to_process, PREPROCESSING_STEPS)
+        finally:
+            # Delete the temporary file
+            os.remove(file_to_process)
 
         ocr_texts.append(ocr_text)
         ground_truths.append(gt_text)
         filenames.append(filename)
 
-        # Delete the temporary file
-        os.remove(file_to_process)
-
-    logger.error(PREPROCESSING_STEPS)
     report = TextMetricsReport(ground_truths, ocr_texts, filenames, PREPROCESSING_STEPS)
     report.generate_report()
 
@@ -138,16 +141,12 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
         for filename, ocr_file in ocr_files_dict.items():
             preprocess_steps = []
             original_file = store_file(ocr_file, ocr_file.filename)
-            logger.error('original_file')
-            logger.error(original_file)
             image_path = original_file[:-5] + ".jpeg"
             if ocr_file.content_type == 'application/pdf':
                 if not os.path.exists(image_path):  # Checking if the image already exists
                     images_from_pdf = convert_from_path(original_file)
                     images_from_pdf[0].save(image_path, 'JPEG')
             file_to_process = image_path
-            logger.error('file_to_process')
-            logger.error(file_to_process)
             # Apply selected preprocessing methods via pipeline and perform OCR
             ocr_text = await process_and_read_image(file_to_process, combo)
 
@@ -180,7 +179,7 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
         await gt_file.close()
 
     logging.info(all_metrics)
-    report = TextMetricsReport(all_metrics, PREPROCESSING_STEPS)
+    report = TextMetricsReport(all_metrics=all_metrics)
     report.generate_report()
     return FileResponse(report.filename, media_type='text/csv',
                         headers={"Content-Disposition": f"attachment;filename={report.filename}"})
@@ -200,7 +199,9 @@ async def process_csv(request: Request):
     return FileResponse(result_filename, media_type='text/csv')
 
 
-async def process_and_read_image(image_path, preprocess_steps=[]):
+async def process_and_read_image(image_path, preprocess_steps=None):
+    if preprocess_steps is None:
+        preprocess_steps = []
     preprocess_pipeline = ImagePipeline(image_path, preprocess_steps)
     preprocessed_image = preprocess_pipeline.process_image()
     return await read_image(preprocessed_image)

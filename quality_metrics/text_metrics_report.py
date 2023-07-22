@@ -26,39 +26,40 @@ class TextMetricsReport:
         logger.info('Generating text metrics report')
         current_time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
         self.filename = REPORTS_PATH+f'/text_metrics_report_{current_time}.csv'
+        if self.all_metrics is None:
+            total_cer, total_wer, total_lev_distance = 0, 0, 0
+            total_characters, total_words = 0, 0
+            steps = ', '.join(self.preprocess_steps)
+            for i, (gt, ocr, fname) in enumerate(
+                    zip(self.ground_truths, self.ocr_texts, self.filenames)):
 
-        total_cer, total_wer, total_lev_distance = 0, 0, 0
-        total_characters, total_words = 0, 0
-        steps = ', '.join(self.preprocess_steps)
-        for i, (gt, ocr, fname) in enumerate(
-                zip(self.ground_truths, self.ocr_texts, self.filenames)):
+                tm = TextMetrics(gt, ocr)
+                wer = tm.wer()
+                cer = tm.cer()
+                lev_distance = tm.lev_distance()
 
-            tm = TextMetrics(gt, ocr)
-            wer = tm.wer()
-            cer = tm.cer()
-            lev_distance = tm.lev_distance()
+                total_wer += wer * len(ocr.split())
+                total_cer += cer * len(ocr.replace(' ', ''))
+                total_lev_distance += lev_distance
+                total_characters += len(ocr.replace(' ', ''))
+                total_words += len(ocr.split())
 
-            total_wer += wer * len(ocr.split())
-            total_cer += cer * len(ocr.replace(' ', ''))
-            total_lev_distance += lev_distance
-            total_characters += len(ocr.replace(' ', ''))
-            total_words += len(ocr.split())
+                self.metrics.append(
+                    {'Index': i, 'Filename': fname, 'Preprocessing Steps': steps, 'WER': wer, 'CER': cer,
+                     'Levenshtein Distance': lev_distance})
 
-            self.metrics.append(
-                {'Index': i, 'Filename': fname, 'Preprocessing Steps': steps, 'WER': wer, 'CER': cer,
-                 'Levenshtein Distance': lev_distance})
+            logger.info(f"Computed metrics for {len(self.metrics)} files")
 
-        logger.info(f"Computed metrics for {len(self.metrics)} files")
+            if total_words != 0 and total_characters != 0:
+                overall_wer = total_wer / total_words
+                overall_cer = total_cer / total_characters
+                overall_lev_distance = total_lev_distance / len(self.metrics)
+                self.metrics.append({'Index': -1, 'Filename': 'Overall', 'WER': overall_wer, 'CER': overall_cer,
+                                     'Levenshtein Distance': overall_lev_distance})
 
-        if total_words != 0 and total_characters != 0:
-            overall_wer = total_wer / total_words
-            overall_cer = total_cer / total_characters
-            overall_lev_distance = total_lev_distance / len(self.metrics)
-            self.metrics.append({'Index': -1, 'Filename': 'Overall', 'WER': overall_wer, 'CER': overall_cer,
-                                 'Levenshtein Distance': overall_lev_distance})
-
-        df = pd.DataFrame(self.metrics)
-
+            df = pd.DataFrame(self.metrics)
+        else:
+            df = pd.DataFrame(self.all_metrics)
         # Create the directory if it does not exist
         if not os.path.exists(REPORTS_PATH):
             os.makedirs(REPORTS_PATH)
@@ -97,7 +98,7 @@ class TextMetricsReport:
     def analyze_experiment(self, filename, metric='Levenshtein Distance'):
         logger.info(f'Starting analysis of experiment with file: {filename} and metric: {metric}')
         # Convert the file to a DataFrame
-        df = pd.read_csv(filename, sep=';')
+        df = pd.read_csv(filename, sep=',')
         logger.info(f'Read data from {filename}')
 
         # Initialize a list to store the new data
@@ -127,7 +128,8 @@ class TextMetricsReport:
             best_preprocessing = best_row['Preprocessing Steps'].values[0]
 
             # Calculate the improvement in percent and round to 2 decimal places
-            improvement = round((baseline_metric - best_metric) / baseline_metric * 100, 2)
+            improvement = round(((baseline_metric - best_metric) / baseline_metric) * 100, 2)
+
 
             # Append the improvement to the improvements list
             improvements.append(improvement)
@@ -171,7 +173,7 @@ class TextMetricsReport:
         if not os.path.exists(REPORTS_PATH):
             os.makedirs(REPORTS_PATH)
         self.filename = os.path.join(REPORTS_PATH, f'text_metrics_report_output.csv')
-        new_df.to_csv(self.filename, sep=';', index=False)
+        new_df.to_csv(self.filename, sep=',', index=False)
 
         logger.info(f'Finished analysis of experiment. Results saved to {self.filename}')
 

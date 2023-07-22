@@ -18,13 +18,17 @@ def prepare_file_dicts(ocr_files: List[UploadFile], gt_files: List[UploadFile]):
 
 
 def store_file(file, filename):
-    try:
-        filepath = os.path.join(TEMP_PATH, filename)
-        with open(filepath, "wb+") as file_object:
-            file_object.write(file.file.read())
-    except IOError as e:
-        logger.error(f'Failed to store file {filename}: {str(e)}')
-        raise HTTPException(status_code=500, detail="Internal server error")
+    filepath = os.path.join(TEMP_PATH, filename)
+
+    # Only store the file if it doesn't exist
+    if not os.path.exists(filepath):
+        try:
+            with open(filepath, "wb+") as file_object:
+                file_object.write(file.file.read())
+        except IOError as e:
+            logger.error(f'Failed to store file {filename}: {str(e)}')
+            raise HTTPException(status_code=500, detail="Internal server error")
 
     return filepath
+
 
