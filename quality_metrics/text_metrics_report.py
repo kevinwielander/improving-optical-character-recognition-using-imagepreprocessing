@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 class TextMetricsReport:
     def __init__(self, ground_truths=None, ocr_texts=None, filenames=None, preprocess_steps=None, all_metrics=None):
+        logger.info('Initialized TextMetricsReport')
         self.ground_truths = ground_truths
         self.ocr_texts = ocr_texts
         self.filenames = filenames
@@ -92,10 +93,11 @@ class TextMetricsReport:
             df.to_csv(self.filename, index=False)
             logger.info(f"Created new report {self.filename}")
 
-
     def analyze_experiment(self, filename, metric='Levenshtein Distance'):
+        logger.info(f'Starting analysis of experiment with file: {filename} and metric: {metric}')
         # Convert the file to a DataFrame
         df = pd.read_csv(filename, sep=';')
+        logger.info(f'Read data from {filename}')
 
         # Initialize a list to store the new data
         new_data = []
@@ -103,6 +105,7 @@ class TextMetricsReport:
 
         # Get all unique image numbers
         image_numbers = df['Filename'].unique()
+        logger.info(f'Found {len(image_numbers)} unique image numbers')
 
         # For each image number
         for num in image_numbers:
@@ -131,6 +134,8 @@ class TextMetricsReport:
             # Append the data for this image number to the list
             new_data.append([num, baseline_metric, best_metric, best_preprocessing, improvement])
 
+        logger.info('Calculated improvements for all image numbers')
+
         # Calculate the average, median, min, max, and standard deviation of the improvements
         average_improvement = round(np.average(improvements), 2)
         median_improvement = round(np.median(improvements), 2)
@@ -142,6 +147,8 @@ class TextMetricsReport:
         best_preprocessing_steps = max(new_data, key=lambda x: x[-1])[3]
         worst_preprocessing_steps = min(new_data, key=lambda x: x[-1])[3]
 
+        logger.info('Calculated statistics for improvements')
+
         # Append the calculated statistics to the list
         placeholder = '---'
         new_data.append([placeholder, placeholder, placeholder, 'Average Improvement:', average_improvement])
@@ -150,7 +157,8 @@ class TextMetricsReport:
         new_data.append([placeholder, placeholder, placeholder, 'Max Improvement:', max_improvement])
         new_data.append([placeholder, placeholder, placeholder, 'Std Dev Improvement:', std_dev_improvement])
         new_data.append([placeholder, placeholder, placeholder, 'Best Preprocessing Steps:', best_preprocessing_steps])
-        new_data.append([placeholder, placeholder, placeholder, 'Worst Preprocessing Steps:', worst_preprocessing_steps])
+        new_data.append(
+            [placeholder, placeholder, placeholder, 'Worst Preprocessing Steps:', worst_preprocessing_steps])
 
         # Convert the list to a DataFrame
         new_df = pd.DataFrame(new_data, columns=['Image Number', 'Baseline ' + metric, 'Best ' + metric,
@@ -165,5 +173,8 @@ class TextMetricsReport:
         self.filename = os.path.join(directory, f'text_metrics_report_output.csv')
         new_df.to_csv(self.filename, sep=';', index=False)
 
+        logger.info(f'Finished analysis of experiment. Results saved to {self.filename}')
+
         return self.filename
+
 

@@ -1,22 +1,22 @@
 import os
 from shutil import copyfile
 
-import PIL
 import cv2
 import numpy as np
 from PIL import Image
 import logging
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class Preprocessor:
     def __init__(self, image_path):
+        logger.info('Initialized Preprocessor')
         self.image_path = image_path
         self.copy_image_path = self._create_copy(image_path)
         self.image = cv2.imread(self.copy_image_path)
 
     def _create_copy(self, image_path):
+
         # generate a new path for the copy
         directory, filename = os.path.split(image_path)
         basename, ext = os.path.splitext(filename)
@@ -48,7 +48,7 @@ class Preprocessor:
             scaling_factor = 300.0 / current_dpi
             resized_image = cv2.resize(self.image, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_CUBIC)
             self.image = resized_image
-        logger.info("Checked and scaled DPI. Current DPI: %s", current_dpi)
+        logger.info("Checked and scaled DPI. Initial DPI: %s", current_dpi)
 
     def apply_filter(self):
         img = cv2.GaussianBlur(self.image, (5, 5), 0)
@@ -74,6 +74,7 @@ class Preprocessor:
 
 class ImagePipeline:
     def __init__(self, preprocessor):
+        logger.info('Initialized Image Pipeline')
         self.preprocessor = preprocessor
 
     def process_image(self, steps):
@@ -90,6 +91,6 @@ class ImagePipeline:
         for step in steps:
             method_map[step]()
         processed_image = self.preprocessor.image
-        logger.info("Image preprocessing complete.")
+        logger.info("Image preprocessing of Image Pipeline complete.")
         self.preprocessor.delete_copy()
         return processed_image

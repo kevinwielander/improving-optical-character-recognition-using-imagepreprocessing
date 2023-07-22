@@ -44,12 +44,15 @@ path = "temp"
 
 @app.get("/")
 def root(request: Request):
+    logger.info('Received request for index.html')
     return frontend.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/convert")
 async def convert(images: List[UploadFile] = File(...)):
+    logger.info('Received request for convert Endpoint')
     if len(images) == 0:
+        logger.error('No images provided')
         raise HTTPException(status_code=400, detail="No images provided")
     results = []
     for image in images:

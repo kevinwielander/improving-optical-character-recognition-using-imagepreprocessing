@@ -6,9 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="a3dedc67-c00c-4740-8acc-e980b3709972" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/tesseract.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocr/tesseract.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/preprocessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/scaling.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quality_metrics/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quality_metrics/text_metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/quality_metrics/text_metrics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quality_metrics/text_metrics_report.py" beforeDir="false" afterPath="$PROJECT_DIR$/quality_metrics/text_metrics_report.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quality_metrics/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/quality_metrics/visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +110,8 @@
       <workItem from="1688930586197" duration="928000" />
       <workItem from="1688977288371" duration="20775000" />
       <workItem from="1689003055267" duration="22432000" />
-      <workItem from="1689954350686" duration="6617000" />
+      <workItem from="1689954350686" duration="7455000" />
+      <workItem from="1690011822059" duration="1989000" />
     </task>
     <servers />
   </component>

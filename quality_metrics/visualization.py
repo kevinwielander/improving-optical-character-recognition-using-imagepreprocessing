@@ -1,13 +1,18 @@
 import os
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+
 class Visualization:
     def __init__(self, df):
+        logger.info('Initialized Logging')
         self.df = df
 
     def plot_metrics(self, save=False):
+        logger.info('Plotting Metrics')
         fig, axs = plt.subplots(3, 1, figsize=(10, 15))
 
         # Plot CER
@@ -28,13 +33,14 @@ class Visualization:
         plt.tight_layout()
 
         if save:
+            logger.info('Saving Metrics')
             if not os.path.exists("resources/plots"):
                 os.makedirs("resources/plots")
             plt.savefig(f"resources/plots/metrics_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
         #plt.show()
 
     def plot_histogram(self, save=False):
-
+        logger.info('Plotting Histogram')
         # Filter out the rows with statistics
         df = self.df[self.df['Improvement in Percent'].apply(lambda x: isinstance(x, (int, float)))]
 
@@ -47,6 +53,7 @@ class Visualization:
         plt.ylabel('Frequency')
 
         if save:
+            logger.info('Saving Histogram Metrics')
             if not os.path.exists("resources/plots"):
                 os.makedirs("resources/plots")
             plt.savefig(f"resources/plots/histogram_improvement{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
