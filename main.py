@@ -1,4 +1,7 @@
+import io
 import itertools
+
+import pandas as pd
 from starlette.responses import FileResponse
 from typing import List
 from fastapi import FastAPI, UploadFile, Request, File, Response, HTTPException
@@ -9,6 +12,8 @@ from datetime import datetime
 import os
 from pdf2image import convert_from_path
 
+from classification.feature_extraction import ImageFeaturesExtractor
+from classification.train_model import PreprocessingOptimization
 from ocr.tesseract import read_image
 from preprocessing.image_pipeline import ImagePipeline
 from quality_metrics.text_metrics import TextMetrics
@@ -204,6 +209,66 @@ async def process_csv(request: Request):
     # Return the file
     return FileResponse(result_filename, media_type='text/csv')
 
+
+@app.post("/extract_features")
+async def extract_features_endpoint(images: List[UploadFile] = File(...)):
+    logger.info('Received request for extract_features Endpoint')
+    if len(images) == 0:
+        logger.error('No images provided')
+        raise HTTPException(status_code=400, detail="No images provided")
+
+    # DataFrame to hold the features for all images
+    all_features = pd.DataFrame()
+
+    for image in images:
+        filename = store_file(image, image.filename)
+
+        if image.content_type == 'application/pdf':
+            images_from_pdf = convert_from_path(filename)
+            image_path = filename[:-4] + ".jpeg"
+            images_from_pdf[0].save(image_path, 'JPEG')
+            filename = image_path
+
+        # Extract features from the image
+        extractor = ImageFeaturesExtractor(filename)
+        features = extractor.extract_features()
+
+        # Add the features to the DataFrame
+        all_features = pd.concat([all_features, features], ignore_index=True)
+
+        os.remove(filename)
+
+    # Convert the DataFrame to a CSV
+    csv = all_features.to_csv(index=False)
+    file_bytes = BytesIO(csv.encode())
+    file_name = 'features.csv'
+    return Response(content=file_bytes.getvalue(), media_type="text/csv",
+                    headers={"Content-Disposition": f"attachment;filename={file_name}"})
+
+@app.post("/upload_and_train")
+async def upload_and_train(file: UploadFile = File(...)):
+    # Check if the file is in the correct format
+    if file.content_type != 'text/csv':
+        raise HTTPException(status_code=400, detail="File must be in CSV format")
+
+    # Read the file into a DataFrame
+    try:
+        df = pd.read_csv(io.StringIO(file.file.read().decode("utf-8")))
+        df.to_csv(file.filename, index=False)  # save the dataframe to a file to be used by the class
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Error reading CSV file") from e
+
+    # Create and train your class
+    preprocessing_optimizer = PreprocessingOptimization(df)
+    preprocessing_optimizer.load_and_preprocess_data()
+    preprocessing_optimizer.train()
+
+    # Since we have multiple models in train() function, it's not straightforward to return
+    # accuracy and cross-validation scores for a single model.
+    # Either you should train a single model in train() function or return performance metrics
+    # for each trained model separately.
+
+    return {"message": "Training completed. Check logs for model performance."}
 
 async def process_and_read_image(image_path, preprocess_steps=None):
     if preprocess_steps is None:
