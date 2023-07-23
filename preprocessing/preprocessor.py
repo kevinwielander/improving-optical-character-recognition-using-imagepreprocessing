@@ -45,7 +45,7 @@ class Preprocessor:
         current_dpi = max(dpi)
         if current_dpi < 300:
             scaling_factor = 300.0 / current_dpi
-            img = img.resize((int(img.size[0] * scaling_factor), int(img.size[1] * scaling_factor)), Image.ANTIALIAS)
+            img = img.resize((int(img.size[0] * scaling_factor), int(img.size[1] * scaling_factor)), Image.LANCZOS)
             logger.info("Checked and scaled DPI. Initial DPI: %s", current_dpi)
             img.save(self.image_path)  # Save the scaled image back to the file
 

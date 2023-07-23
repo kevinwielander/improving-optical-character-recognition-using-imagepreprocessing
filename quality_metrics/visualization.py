@@ -4,6 +4,8 @@ import seaborn as sns
 from datetime import datetime
 from utils.config import PLOTS_PATH
 import logging
+import matplotlib
+matplotlib.use('Agg')
 
 logger = logging.getLogger(__name__)
 

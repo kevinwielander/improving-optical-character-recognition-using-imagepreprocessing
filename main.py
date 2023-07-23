@@ -64,7 +64,7 @@ async def convert(images: List[UploadFile] = File(...)):
             filename = image_path
 
         # Preprocess the image
-        text = await process_and_read_image(filename, PREPROCESSING_STEPS)  # Add 'await' here
+        text = await process_and_read_image(filename, PREPROCESSING_STEPS)
 
         os.remove(filename)
         file_name = image.filename.split('.')[0] + '.txt'
@@ -188,8 +188,14 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
 @app.post('/process_results')
 async def process_csv(request: Request):
     form = await request.form()
-    csv_file = form["file"]
-    metric = form["metric"]  # Get selected metric
+    csv_file = form.get("file")
+    metric = form.get("metric")
+
+    # Check if file or metric is not provided
+    if csv_file is None:
+        raise HTTPException(status_code=400, detail="No file provided")
+    if metric is None:
+        raise HTTPException(status_code=400, detail="No metric provided")
 
     filename = store_file(csv_file, csv_file.filename)
     report = TextMetricsReport()
