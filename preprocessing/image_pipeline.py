@@ -24,3 +24,30 @@ class ImagePipeline:
         logger.info("Image preprocessing of Image Pipeline complete.")
         self.preprocessor.delete_copy()
         return processed_image
+
+    def process_image_variation(self):
+        self.preprocessor.check_and_scale_dpi()
+        self.preprocessor.to_grayscale()
+
+        method_map = {step: getattr(self.preprocessor, step + '_variation') for step in self.preprocess_steps}
+        for step in self.preprocess_steps:
+            if step in method_map:
+                method_map[step]()
+        processed_image = self.preprocessor.image
+        logger.info("Image preprocessing with variations complete.")
+        self.preprocessor.delete_copy()
+        return processed_image
+
+    def process_image_multiple_rounds(self):
+        self.preprocessor.check_and_scale_dpi()
+        self.preprocessor.to_grayscale()
+
+        method_map = {step: getattr(self.preprocessor, step + '_multiple_rounds') for step in self.preprocess_steps}
+        for step in self.preprocess_steps:
+            if step in method_map:
+                method_map[step]()
+        processed_image = self.preprocessor.image
+        logger.info("Image preprocessing with multiple rounds complete.")
+        self.preprocessor.delete_copy()
+        return processed_image
+

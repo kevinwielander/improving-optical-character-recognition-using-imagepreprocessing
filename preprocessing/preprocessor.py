@@ -72,3 +72,37 @@ class Preprocessor:
         img = cv2.threshold(self.image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
         self.image = img
         logger.info("Applied thresholding.")
+
+    def apply_filter_multiple_rounds(self, rounds=2):
+        for _ in range(rounds):
+            self.apply_filter()
+        logger.info("Applied Gaussian filter for multiple rounds.")
+
+    def apply_non_local_means_multiple_rounds(self, rounds=2):
+        for _ in range(rounds):
+            self.apply_non_local_means()
+        logger.info("Applied Non-Local Means Denoising for multiple rounds.")
+
+    def apply_morphological_operation_multiple_rounds(self, rounds=2):
+        for _ in range(rounds):
+            self.apply_morphological_operation()
+        logger.info("Applied morphological operations for multiple rounds.")
+
+    def apply_filter_variation(self):
+        img = cv2.GaussianBlur(self.image, (3, 3), 0)
+        self.image = img
+        logger.info("Applied Gaussian filter variation.")
+
+    def apply_non_local_means_variation(self):
+        img = cv2.fastNlMeansDenoising(self.image, h=10)
+        self.image = img
+        logger.info("Applied Non-Local Means Denoising variation.")
+
+    def apply_morphological_operation_variation(self):
+        kernel = np.ones((2, 2), np.uint8)
+        img = cv2.dilate(self.image, kernel, iterations=1)
+        img = cv2.erode(img, kernel, iterations=1)
+        self.image = img
+        logger.info("Applied morphological operations variation.")
+
+
