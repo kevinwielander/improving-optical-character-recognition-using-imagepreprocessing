@@ -126,7 +126,7 @@ async def text_metrics_report(ocr_files: List[UploadFile] = File(...), gt_files:
 
 
 @app.post("/experiment")
-async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[UploadFile] = File(...)):
+async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[UploadFile] = File(...), experiment_type: str = "multiple_rounds"):
     logger.info('Received request for OCR experiment')
     if len(ocr_files) == 0 or len(gt_files) == 0:
         logger.warning('No text files provided')
@@ -135,8 +135,17 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
     ocr_files_dict, gt_files_dict = prepare_file_dicts(ocr_files, gt_files)
 
     preprocess_methods = PREPROCESSING_STEPS
+
+    if experiment_type == "variation":
+        preprocess_methods = [method + '_variation' for method in preprocess_methods]
+    elif experiment_type == "multiple_rounds":
+        preprocess_methods = ['filter_multiple_rounds', 'non_local_means_multiple_rounds']
+
     combinations = list(itertools.chain(*map(lambda x: itertools.combinations(preprocess_methods, x),
                                              range(0, len(preprocess_methods) + 1))))
+
+    if experiment_type == "multiple_rounds":
+        combinations = [combo for combo in combinations if len(combo) <= 2]
 
     all_metrics = []
     i = 0
@@ -258,15 +267,9 @@ async def upload_and_train(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail="Error reading CSV file") from e
 
-    # Create and train your class
     preprocessing_optimizer = PreprocessingOptimization(df)
     preprocessing_optimizer.load_and_preprocess_data()
     preprocessing_optimizer.train()
-
-    # Since we have multiple models in train() function, it's not straightforward to return
-    # accuracy and cross-validation scores for a single model.
-    # Either you should train a single model in train() function or return performance metrics
-    # for each trained model separately.
 
     return {"message": "Training completed. Check logs for model performance."}
 
@@ -274,5 +277,6 @@ async def process_and_read_image(image_path, preprocess_steps=None):
     if preprocess_steps is None:
         preprocess_steps = []
     preprocess_pipeline = ImagePipeline(image_path, preprocess_steps)
-    preprocessed_image = preprocess_pipeline.process_image()
+    preprocessed_image = preprocess_pipeline.process_image_multiple_rounds()
     return await read_image(preprocessed_image)
+

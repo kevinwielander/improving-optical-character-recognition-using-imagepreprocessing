@@ -42,7 +42,7 @@ class ImagePipeline:
         self.preprocessor.check_and_scale_dpi()
         self.preprocessor.to_grayscale()
 
-        method_map = {step: getattr(self.preprocessor, step + '_multiple_rounds') for step in self.preprocess_steps}
+        method_map = {step: getattr(self.preprocessor, PREPROCESSING_METHODS[step]) for step in self.preprocess_steps}
         for step in self.preprocess_steps:
             if step in method_map:
                 method_map[step]()
