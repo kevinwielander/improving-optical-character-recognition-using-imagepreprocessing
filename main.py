@@ -126,7 +126,7 @@ async def text_metrics_report(ocr_files: List[UploadFile] = File(...), gt_files:
 
 
 @app.post("/experiment")
-async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[UploadFile] = File(...), experiment_type: str = "multiple_rounds"):
+async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[UploadFile] = File(...), experiment_type: str = "variation"):
     logger.info('Received request for OCR experiment')
     if len(ocr_files) == 0 or len(gt_files) == 0:
         logger.warning('No text files provided')
@@ -137,7 +137,7 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
     preprocess_methods = PREPROCESSING_STEPS
 
     if experiment_type == "variation":
-        preprocess_methods = [method + '_variation' for method in preprocess_methods]
+        preprocess_methods = [method for method in preprocess_methods]
     elif experiment_type == "multiple_rounds":
         preprocess_methods = ['filter_multiple_rounds', 'non_local_means_multiple_rounds']
 
@@ -277,6 +277,6 @@ async def process_and_read_image(image_path, preprocess_steps=None):
     if preprocess_steps is None:
         preprocess_steps = []
     preprocess_pipeline = ImagePipeline(image_path, preprocess_steps)
-    preprocessed_image = preprocess_pipeline.process_image_multiple_rounds()
+    preprocessed_image = preprocess_pipeline.process_image_variation()
     return await read_image(preprocessed_image)
 
