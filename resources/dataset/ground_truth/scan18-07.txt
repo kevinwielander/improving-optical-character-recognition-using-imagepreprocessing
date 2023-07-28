@@ -1,0 +1,72 @@
+ENTLER
+EIN RESTAURANT
+
+Restaurant Entler
+Schlüsselgasse 2
+1040 Wien
+tet +43 (0)1 504 35 85
+E-Mail: mail@entler.at
+
+26.01.2019 20:59:59
+Restaurant / Kassa
+Es bediente Sie Kellner 2
+mail@entler.at
+VKZ:20
+
+Rechnung 2019-8839
+Gänseleber-brulee
+1,00 Stk a 16,80 EUR 16,80 EUR
+
+Topinambursuppe
+1,00 Stk a 5,80 EUR 5,80 EUR
+
+Kürbis-suppe
+1,00 Stk a 5,80 EUR 5,80 EUR
+
+Wild-schwein
+5,00 Stk. a 25,80 EUR 129,00 EUR
+
+Schweine-filet
+1,00 Stk a 19,80 EUR 19,80 EUR
+
+Truthahnbrust
+1,00 Stk a 14,50 EUR 14,50 EUR
+
+Lachs Scampi
+1,00 Stk a 26,50 EUR 26.50 EUR
+
+Prosecco mit Holunder
+3,00 Stk a 4,30 EUR 12,90 EUR
+
+Tr r Pils, 0,3
+5,00 Stk a 3,50 EUR 17,50 EUR
+
+Auslese
+1,00 Stk a 3,80 EUR 3,80 EUR
+
+Blaufränkisch Reumann
+2,00 Stk a 32,00 EUR 64,00 EUR
+
+Römerquelle 0,75
+1,00 Stk a 4,70 EUR 4,70 EUR
+
+Kleiner Espresso
+3,00 Stk a 2,90 EUR 8.70 EUR
+
+Cappucino
+1,00 Stk a 3,60 EUR 3,60 EUR
+
+Großer Brauner
+1,00 Stk a 4,30 EUR 4,30 EUR
+
+Passionsfrucht Creme Brulee
+1,00 Stk a 9,50 EUR 9,50 EUR
+
+Sorbetvariation
+3,00 Stk a 8,20 EUR 24,60 EUR
+
+Gedeck pro Person
+8,00 Stk a 2,50 EUR 20,00 EUR
+
+Summe 391,80 EUR
+

@@ -1,0 +1,25 @@
+Rechnung
+Otto e Mezzo
+Schleifmühlgasse 20/4
+1040 Wien
+UlD-ATU62131204
+
+Tisch: Nichtraucher / N1
+
+BelegNr: 2018-1227 28.11.2018 21:02:30
+Kassa : KA002 (OTTOEMEZZO)
+Menge Bezeichnung Preis Summe
+1x San Pelegrino 0,75 5,10 5,10
+6 x Schremser Bier 0,3 3,10 18,60
+1x Pizza Regina 12,90 12,90
+1x Tagliatelle 8 1/2 12,80 12, 80
+
+$unne: 49,40 Euro
+MwSt% Netto MwSt Brutto
+10% 23,36 2,34 25,70
+20% 19,75 3,95 23,70
+
+Es bediente Sie
+Boss
+VIELEN DANK
+FÜR IHREN BESUCH
