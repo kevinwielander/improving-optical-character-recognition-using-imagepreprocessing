@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 def prepare_file_dicts(ocr_files: List[UploadFile], gt_files: List[UploadFile]):
     # Use a regular expression to get the number at the end of the filename
-    ocr_files_dict = {re.search(r'(\d+)(?!.*\d)', file.filename).group(): file for file in ocr_files}
-    gt_files_dict = {re.search(r'(\d+)(?!.*\d)', file.filename).group(): file.file.read().decode('utf-8') for file in gt_files}
+    ocr_files_dict = {re.search(r'(\d{2}-\d{2})(?!.*\d)', file.filename).group(): file for file in ocr_files}
+    gt_files_dict = {re.search(r'(\d{2}-\d{2})(?!.*\d)', file.filename).group(): file.file.read().decode('utf-8') for file in gt_files}
 
     return ocr_files_dict, gt_files_dict
 

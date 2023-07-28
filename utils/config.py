@@ -9,8 +9,8 @@ LOG_FILE = "app.log"
 
 
 # List of preprocessing steps
-#PREPROCESSING_STEPS = ['filter', 'non_local_means', 'morphological_operation', 'thresholding']
-PREPROCESSING_STEPS = ['filter']
+PREPROCESSING_STEPS = ['filter', 'non_local_means', 'morphological_operation', 'thresholding']
+#PREPROCESSING_STEPS = ['filter']
 
 PREPROCESSING_METHODS = {
     'filter': 'apply_filter',
