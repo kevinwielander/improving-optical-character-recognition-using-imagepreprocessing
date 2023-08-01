@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
+from xgboost import XGBClassifier
 
 class PreprocessingOptimization:
     def __init__(self, df):
@@ -21,8 +22,13 @@ class PreprocessingOptimization:
         # remove periods from large numbers in all columns
         self.df = self.df.replace(r'\.', '', regex=True)
 
+        # Remove rows with NaN values
+        self.df = self.df.dropna()
+
+
         X = self.df.drop(['TARGET_WER', 'TARGET_CER', 'TARGET_LEVENSHTEIN-DISTANCE'], axis=1)
         y = self.df['TARGET_WER']
+
 
         scaler = StandardScaler()
         X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
@@ -35,8 +41,8 @@ class PreprocessingOptimization:
     def train(self):
 
         # Create and cross validate different models
-        models = [SVC(), RandomForestClassifier(), MLPClassifier(max_iter=1000, early_stopping=True)]
-        model_names = ['SVC', 'Random Forest', 'MLP Neural Network']
+        models = [SVC(), RandomForestClassifier(), MLPClassifier(max_iter=1000, early_stopping=True), XGBClassifier()]
+        model_names = ['SVC', 'Random Forest', 'MLP Neural Network', 'XGBoost']
 
         for model, name in zip(models, model_names):
             kfold = KFold(n_splits=10, shuffle=True, random_state=42)

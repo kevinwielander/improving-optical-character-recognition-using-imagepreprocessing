@@ -14,7 +14,11 @@ logger = logging.getLogger(__name__)
 class ImageFeaturesExtractor:
     def __init__(self, filename: str):
         logger.info('Iniialized Image FeatureExtractor')
-        self.filename = re.findall(r'(\d+)\.', filename)[-1]
+        match = re.search(r'(\d{2}-\d{2})(?!.*\d)', filename)
+        if match is not None:
+            self.filename = match.group()
+        else:
+            self.filename = None
         self.img = cv2.imread(filename)
 
     def calculate_contrast(self):
