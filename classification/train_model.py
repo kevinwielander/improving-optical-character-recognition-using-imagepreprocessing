@@ -6,9 +6,12 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from xgboost import XGBClassifier
+import logging
 
+logger = logging.getLogger(__name__)
 class PreprocessingOptimization:
     def __init__(self, df):
+        logger.info('Initialized PreprocessingOptimization')
         self.df = df
         self.X_train = None
         self.X_test = None
@@ -16,6 +19,7 @@ class PreprocessingOptimization:
         self.y_test = None
 
     def load_and_preprocess_data(self):
+        logger.info('load and preprocessing data has started')
         if 'filename' in self.df.columns:
             self.df = self.df.drop(['filename'], axis=1)
 
@@ -36,13 +40,14 @@ class PreprocessingOptimization:
         le = LabelEncoder()
         y = le.fit_transform(y)
 
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     def train(self):
+        logger.info('train has started!')
 
         # Create and cross validate different models
-        models = [SVC(), RandomForestClassifier(), MLPClassifier(max_iter=1000, early_stopping=True), XGBClassifier()]
-        model_names = ['SVC', 'Random Forest', 'MLP Neural Network', 'XGBoost']
+        models = [SVC(), RandomForestClassifier(), MLPClassifier(max_iter=10000)]
+        model_names = ['SVC', 'Random Forest', 'MLP Neural Network']
 
         for model, name in zip(models, model_names):
             kfold = KFold(n_splits=10, shuffle=True, random_state=42)
