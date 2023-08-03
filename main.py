@@ -141,8 +141,7 @@ async def experiment(ocr_files: List[UploadFile] = File(...), gt_files: List[Upl
     elif experiment_type == "multiple_rounds":
         preprocess_methods = ['filter_multiple_rounds', 'non_local_means_multiple_rounds']
 
-    # Generate permutations of all lengths
-    combinations = list(itertools.chain(*map(lambda x: itertools.permutations(preprocess_methods, x),
+    combinations = list(itertools.chain(*map(lambda x: itertools.combinations(preprocess_methods, x),
                                              range(0, len(preprocess_methods) + 1))))
 
     if experiment_type == "multiple_rounds":
