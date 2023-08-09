@@ -32,7 +32,7 @@ docker build -t <docker-image-name> .
 ## Running a Docker Container
 
 ```bash
-docker run -d -p 8080:8000 <docker-image-name>
+docker run -d -p 8080:8080 <docker-image-name>
 ```
 
 
