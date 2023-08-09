@@ -1,8 +1,8 @@
 import os
-import io
 import pytest
 import httpx
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
@@ -12,14 +12,14 @@ def test_root():
     assert "request" in response.context
 
 def test_convert_with_two_images():
-    test_file_path1 = os.path.join(os.path.dirname(__file__), 'data', 'test_image00.jpeg')
-    test_file_path2 = os.path.join(os.path.dirname(__file__), 'data', 'test_image01.jpeg')
+    test_file_path1 = os.path.join(os.path.dirname(__file__), 'data', 'test_image00-00.jpeg')
+    test_file_path2 = os.path.join(os.path.dirname(__file__), 'data', 'test_image01-00.jpeg')
 
     with open(test_file_path1, 'rb') as test_file1:
-        files1 = {"images": ("test_image00.jpg", test_file1, 'image/jpeg')}
+        files1 = {"images": ("test_image00-00.jpg", test_file1, 'image/jpeg')}
         response1 = client.post("/convert", files=files1)
     with open(test_file_path2, 'rb') as test_file2:
-        files2 = {"images": ("test_image01.jpg", test_file2, 'image/jpeg')}
+        files2 = {"images": ("test_image01-00.jpg", test_file2, 'image/jpeg')}
         response2 = client.post("/convert", files=files2)
 
     assert response1.status_code == 200
@@ -31,16 +31,15 @@ def test_convert_with_no_images():
     assert response.status_code == 400
 
 def test_evaluation_with_one_image_one_text_file():
-    test_image_path = os.path.join(os.path.dirname(__file__), 'data', 'test_image00.jpeg')
-    test_text_path = os.path.join(os.path.dirname(__file__), 'data', 'test_scan00.txt')
+    test_image_path = os.path.join(os.path.dirname(__file__), 'data', 'test_image00-00.jpeg')
+    test_text_path = os.path.join(os.path.dirname(__file__), 'data', 'test_scan00-00.txt')
 
     with open(test_image_path, 'rb') as test_image, open(test_text_path, 'rb') as test_text:
         files = {
-            "ocr_files": ("test_image00.jpg", test_image, 'image/jpeg'),
-            "gt_files": ("test_text00.txt", test_text, 'text/plain')
+            "ocr_files": ("test_image00-00.jpg", test_image, 'image/jpeg'),
+            "gt_files": ("test_text00-00.txt", test_text, 'text/plain')
         }
-        with httpx.Client(timeout=20.0) as client:
-            response = client.post("http://localhost:8000/evaluation", files=files)
+        response = client.post("/evaluation", files=files)
 
     assert response.status_code == 200
 
@@ -54,13 +53,13 @@ def test_evaluation_with_no_files():
 
 @pytest.mark.skip(reason="no point in testing, takes too long")
 def test_experiment_with_one_image_one_text_file():
-    test_image_path = os.path.join(os.path.dirname(__file__), 'data', 'test_image00.jpeg')
-    test_text_path = os.path.join(os.path.dirname(__file__), 'data', 'test_scan00.txt')
+    test_image_path = os.path.join(os.path.dirname(__file__), 'data', 'test_image00-00.jpeg')
+    test_text_path = os.path.join(os.path.dirname(__file__), 'data', 'test_scan00-00.txt')
 
     with open(test_image_path, 'rb') as test_image, open(test_text_path, 'rb') as test_text:
         files = {
-            "ocr_files": [("test_image00.jpg", test_image, 'image/jpeg')],
-            "gt_files": [("test_scan00.txt", test_text, 'text/plain')]
+            "ocr_files": [("test_image00-00.jpg", test_image, 'image/jpeg')],
+            "gt_files": [("test_scan00-00.txt", test_text, 'text/plain')]
         }
         with httpx.Client(timeout=500.0) as client:
             response = client.post("http://localhost:8000/experiment", files=files)

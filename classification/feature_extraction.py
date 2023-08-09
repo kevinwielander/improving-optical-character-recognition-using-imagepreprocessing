@@ -2,7 +2,8 @@ import re
 import cv2
 import numpy as np
 import pandas as pd
-from skimage.feature import local_binary_pattern, greycomatrix, greycoprops
+from skimage.feature import local_binary_pattern, graycomatrix, graycoprops
+
 from skimage.filters import sobel
 from skimage.color import rgb2gray
 from scipy.stats import skew, kurtosis

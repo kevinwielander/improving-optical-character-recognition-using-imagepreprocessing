@@ -5,7 +5,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
-from xgboost import XGBClassifier
 import logging
 
 logger = logging.getLogger(__name__)
@@ -37,8 +36,8 @@ class PreprocessingOptimization:
         scaler = StandardScaler()
         X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
 
-        le = LabelEncoder()
-        y = le.fit_transform(y)
+        self.le = LabelEncoder()
+        y = self.le.fit_transform(y)
 
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -49,10 +48,35 @@ class PreprocessingOptimization:
         models = [SVC(), RandomForestClassifier(), MLPClassifier(max_iter=10000)]
         model_names = ['SVC', 'Random Forest', 'MLP Neural Network']
 
+        self.predicted_labels = {}
+        self.true_labels = {}  # Store the true labels for each model
+
         for model, name in zip(models, model_names):
             kfold = KFold(n_splits=10, shuffle=True, random_state=42)
             cross_val = cross_val_score(model, self.X_train, self.y_train, cv=kfold)
             model.fit(self.X_train, self.y_train)
+
+            # Transform the predicted labels to original label names
+            original_predicted_labels = self.le.inverse_transform(model.predict(self.X_test))
+            self.predicted_labels[name] = original_predicted_labels
+
+            # Store the true labels
+            original_true_labels = self.le.inverse_transform(self.y_test)
+            self.true_labels[name] = original_true_labels
+
             print(f"{name} Train Score: {model.score(self.X_train, self.y_train)}")
             print(f"{name} Test Score: {model.score(self.X_test, self.y_test)}")
             print(f"{name} K-Fold Cross Validation Score: {np.mean(cross_val)}\n")
+
+        with open("resources/reports/predicted_labels.txt", "w") as file:
+            for model_name in self.predicted_labels.keys():
+                file.write(f"Model: {model_name}\n")
+                file.write("Predicted labels:\n")
+                for label in self.predicted_labels[model_name]:
+                    file.write(str(label) + "\n")
+                file.write("True labels:\n")
+                for label in self.true_labels[model_name]:
+                    file.write(str(label) + "\n")
+
+                file.write("\n")
+
