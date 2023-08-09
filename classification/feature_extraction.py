@@ -2,6 +2,7 @@ import re
 import cv2
 import numpy as np
 import pandas as pd
+#from skimage.feature import local_binary_pattern, graycomatrix, graycoprops
 from skimage.feature import local_binary_pattern, graycomatrix, graycoprops
 
 from skimage.filters import sobel
@@ -46,11 +47,11 @@ class ImageFeaturesExtractor:
         return np.histogram(lbp, bins=np.arange(0, 11), density=True)[0]
 
     def calculate_glcm_features(self):
-        glcm = greycomatrix(self.img, [5], [0], 256, symmetric=True, normed=True)
-        contrast = greycoprops(glcm, 'contrast')[0, 0]
-        correlation = greycoprops(glcm, 'correlation')[0, 0]
-        energy = greycoprops(glcm, 'energy')[0, 0]
-        homogeneity = greycoprops(glcm, 'homogeneity')[0, 0]
+        glcm = graycomatrix(self.img, [5], [0], 256, symmetric=True, normed=True)
+        contrast = graycoprops(glcm, 'contrast')[0, 0]
+        correlation = graycoprops(glcm, 'correlation')[0, 0]
+        energy = graycoprops(glcm, 'energy')[0, 0]
+        homogeneity = graycoprops(glcm, 'homogeneity')[0, 0]
         return contrast, correlation, energy, homogeneity
 
     def extract_features(self) -> pd.DataFrame:
